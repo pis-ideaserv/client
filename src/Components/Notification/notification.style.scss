@@ -1,0 +1,45 @@
+.notification{
+
+    &:hover{
+        opacity: 1;
+    }
+
+    position: fixed;
+    bottom: 12%;
+    right: -48px;
+    background: #3f50b5 !important;
+    transform: rotate(-90deg);
+    text-transform: uppercase;
+    color: white !important;
+    font-weight: bolder;
+    padding: 7px;
+    opacity: 0.12;
+    cursor: pointer;
+    z-index: 1;
+}
+
+
+.notification-table{
+    overflow: auto;
+
+    & table{
+        & thead{
+            & tr{
+                & th{
+                    height: 20px;
+                    background: yellow;
+                }
+            }
+        }
+
+        & tbody{
+            & tr{
+                & td{
+                    & .MuiSkeleton-root{
+                        
+                    }
+                }
+            }
+        }
+    }
+}   

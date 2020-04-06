@@ -1,0 +1,99 @@
+
+*, ::after, ::before {
+    box-sizing: unset;
+}
+
+@media only screen and (max-width: 350px) {
+    body {
+    //   background-color: lightblue;
+    }
+}
+
+@media(max-width: 385px) {
+    .user-icon-login{
+        left :123px !important;    
+    }
+}
+
+@media(max-width: 360px) {
+    .user-icon-login{
+        left :110px !important;    
+    }
+}
+
+
+.logo-login{
+    margin:auto;
+    margin-top:1%;
+    margin-bottom: 20px;
+    text-align: center;
+
+    & img{
+        width:250px;
+    }
+
+    & .logo-title{
+        color: #00127f;
+        font-family: 'Open Sans', sans-serif;
+        text-transform: uppercase;
+        margin-top: -5px;
+        font-size: 30px;
+        font-weight: bolder;
+    }
+}
+
+.card-login{
+    max-width: 350px;
+    margin: auto;
+}
+
+.header-login{
+    padding:none;
+    background-color: #3f51b5;
+    height : 35px;
+}
+
+.wrap-user-icon{
+    position: relative;
+}
+.user-icon-login{
+    color: #ffffff !important;
+    background-color: #7f7f7f !important;
+    
+    position: absolute !important;
+    width:48px !important;
+    height:50px !important;
+
+    left: 135px;
+    top: 5px;
+
+    & .user-icon-login1{
+        font-size: 60px;
+    }
+}
+
+.card-content-login{
+    background-color: #f1f1f1;
+}
+
+.username-login{
+    width: 100%;
+}
+
+.password-login{
+    width:100%;
+    margin-top:0 !important;
+}
+
+.submit-login{
+    margin: 10px;
+    text-align: center;
+
+    & .MuiButton-containedPrimary {
+        padding: 10px 40px 10px 40px;
+    }
+
+    & .MuiCircularProgress-root{
+        position: absolute;
+    }
+}

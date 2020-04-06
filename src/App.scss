@@ -1,0 +1,325 @@
+.paper{
+    position : relative;
+    padding-bottom: 36px;
+
+    & .footer-button{
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        background:#0f3812;
+        // outline:none;
+
+        &:hover{
+            background : #217327;
+        }
+    }
+}
+
+.paper-table{
+    position: relative;
+    padding-top: 30px;
+    margin-top : 110px;
+
+    & .header{
+        position: absolute;
+        width: 90%;
+        top: -32px;
+        left: 4.5%;
+        background: #3f51b5;
+        padding: 10px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        
+        & .title{
+            color : white;
+            text-transform: uppercase;
+            font-weight: bolder;
+            font-size: 18px;
+            width: calc( 95% - 80px);
+        }
+        
+        & .controls{
+            flex: 1;
+            text-align: end;
+
+            & button {
+                margin-right: 5px;
+                // outline: none;
+            }
+        }
+    }
+
+    & div.custom-table{
+        overflow: auto;
+        & table{
+            // width: 100%;
+            // overflow: auto;
+            & thead{
+                
+                
+                
+
+                & tr th{
+                    
+                    &.sticky-header{
+                        position:sticky;
+                        top : 0;
+                    }
+
+                    color: #363638;
+                    white-space: nowrap;
+                    text-transform: uppercase;
+                    font-weight: bolder;
+                    background: white;
+                    z-index: 1;
+                }
+            }
+
+            & tbody{
+                & .filter{
+                    padding:5px !important;
+                    & .input{
+                        width: 100%;
+                        margin: 0 !important;
+                        & .MuiInputBase-root input{
+                            padding:10px !important;
+                        }
+                    }
+                }
+                & tr{
+                    & td {
+                        max-width: 200px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        color : rgb(84, 71, 71);
+                    }
+                }
+            }
+        }
+    }
+
+    & .footer{
+        display: flex;
+        align-items: center;
+        height: 60px;
+
+        & button{
+            margin-left:10px;
+        }
+
+        & table{
+            flex:1
+        }
+        
+    }
+}
+
+.popper-paper{
+    width : 180px;
+    margin-top : 5px;
+    padding-top: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12);
+
+    & button{
+        transform: scale(0.8);
+    }
+
+    & .selector{
+        width : 90%;
+    }
+}
+
+button{
+    outline: none !important;
+}
+
+.table-order{
+    padding: 35px 15px 15px 15px;
+    overflow: auto;
+    overflow-x: hidden;
+    // height: 250px;
+    height: 250px;
+    position: relative;
+    z-index: 2;
+
+    & .title{
+        position: absolute;
+        background: #3f51b5;
+        top: 1px;
+        left: 1px;
+        border-top-left-radius: 3px;
+        padding : 10px;
+        color : white;
+        font-weight: bolder;
+        font-size: 15px;
+        width: 99%;
+        z-index: 1;
+    }
+
+    & ul{
+        min-width: 200px;
+    }
+}
+
+.pointer{
+    cursor: pointer !important;
+}
+
+th.selected-column{
+    border-top: 2px solid #3f50b5;
+    border-right: 2px solid #3f50b5;
+    border-left: 2px solid #3f50b5;   
+}
+
+td.selected-column{
+    border-left: 2px solid #3f50b5;
+    border-right: 2px solid #3f50b5;
+}
+
+.dialog{
+
+
+    .MuiBackdrop-root{
+        // background-color: #0000001c !important;
+    }
+
+    &.fullscreen{
+        & header div{
+            min-height: 48px;
+            
+            & .dialog-title{
+                flex: 1;
+                margin-left: 15px;
+            }
+        }
+        
+    }
+
+    & .MuiDialogTitle-root{
+        background: #3f50b5;
+        color: #fafafa;
+        margin: 1px !important;
+        border-radius: 2px;
+        
+        & .MuiTypography-root{
+            font-weight: bolder;
+        }
+    }
+
+    &.show{
+        & .MuiPaper-root{
+            & .MuiDialogContent-root{
+                & .MuiPaper-root{
+                    overflow: auto;
+                    & table{
+                        & tbody{
+                            & tr{
+                                & td{
+                                    padding-top: 10px;
+                                    padding-bottom: 10px;
+                                    
+                                    &:nth-child(1){
+                                        vertical-align: baseline;
+                                        text-align: end;
+                                        font-weight: bolder;
+                                        text-transform: uppercase;
+                                        color: #3c905e;
+                                        width: 40%;
+                                        white-space: nowrap;
+                                    }
+
+                                    &:nth-child(2){
+                                        color: #2a3035;
+                                        font-weight: 600;
+                                        max-width: 200px;
+                                        /* text-overflow: ellipsis; */
+                                        overflow: auto;
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.edit{
+        & .MuiDialogContent-root .MuiPaper-root{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            & .row{
+                margin-top: 2px;
+                & .title-input{
+                    text-align: end;
+                    text-transform: uppercase;
+                    color:#343535;
+                    font-weight: bolder
+                }
+                
+                & .input{
+                    
+                    & .select-error-message{
+                        font-size: 0.75rem;
+                        color: rgb(249, 81, 61);
+                        text-align: initial;
+                        margin-left: 10px;
+                    }
+
+                    & .select-container{
+                        &.error{
+
+                        }
+                        & .select__control{
+                            height: 35px;
+                            width: 100%;
+                        }
+                    }
+
+                    & .text{
+                        margin: 0;
+                        width: 100%;
+
+                        & input{
+                            height: 0;
+                        }
+                    }
+
+                    &.svg{
+                        position: relative;
+
+                        & .date{
+                            width: 60%;
+                            padding: 2px 35px;
+                            border: 1px solid #cccccc;
+                            border-radius: 3px;
+                            display: flex;
+    
+                            & div::before{
+                                content: none;
+                            }
+                        }
+
+                        & svg{
+                            position: absolute;
+                            top: 7px;
+                            left: 20px
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.submit-progress{
+    width: 30px !important;
+    height: 30px !important;
+    position: absolute;
+}

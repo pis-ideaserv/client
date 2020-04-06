@@ -1,0 +1,39 @@
+.upload{
+
+    & .MuiPaper-root.MuiPaper-elevation24.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthXs.MuiPaper-rounded{
+        position: unset;
+    }
+
+    & .start{
+        padding:20px;
+
+        &.active{
+            border: 2px dashed #6f889e;
+        }
+    }
+
+    & .uploading{
+        padding: 20px;
+        & .MuiLinearProgress-root{
+            width: 200px;
+            height: 8px;
+
+        }
+
+        & b{
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    & .close-upload{
+        &:hover{
+            background: white;
+        }
+
+        position: absolute;
+        background: aliceblue;
+        margin-top: -122px;
+        margin-left: 242px;
+    }
+}

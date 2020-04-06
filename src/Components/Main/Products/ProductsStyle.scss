@@ -1,0 +1,187 @@
+// .productPaperTable{
+//     overflow: auto;
+//     // width : 100%;
+//     // white-space: nowrap;
+
+//     & table.product-list{
+//         & thead{
+//             background: #3f51b5;
+
+//             & tr th{
+//                 color : white;
+//                 white-space: nowrap;
+//             }
+//         }
+
+//         & tbody{
+
+//             & tr{
+//                 & td {
+//                     max-width: 200px;
+//                     overflow: hidden;
+//                     text-overflow: ellipsis;
+//                     white-space: nowrap;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// .product-footer-table{
+
+//     // & div{
+//     //     // margin-top: 33px;
+//     // }
+
+//     & .product-add-new{
+//         position : absolute;
+//         margin-top: -19px;
+//         margin-left: 15px;
+//     }
+
+//     & .product-pagination{
+//         // position: absolute;
+//         padding:0 !important;
+//     }
+
+//     & .product-add-file{
+//         position: absolute;
+//         margin-top: -19px;
+//         margin-left: 120px;
+//     }
+
+// }
+
+// .product-modal-table{
+//     overflow:auto;
+
+//     & table.product-modal-list{
+        
+
+//         & tbody{
+
+//             & tr{
+//                 & td{
+//                     max-width: 150px;
+//                     overflow: hidden;
+//                     // text-overflow: ellipsis;
+//                     white-space: nowrap;
+//                 }
+
+//                 & td.MuiTableCell-head{
+//                     background-color: #3f51b5;
+//                     width : 30%;
+//                     color : white;
+//                     border-radius: 6px;
+//                     // box-shadow:0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)
+//                 }
+
+//                 & td.MuiTableCell-body.product-modal-edit-show{
+//                     padding : 0;
+//                     overflow: visible;
+
+//                     & div.product-modal-edit-input{
+//                         margin:0;
+//                         display: flex;
+
+//                         & .css-yk16xz-control{
+//                             width : 100%;
+//                             margin-left: 5px;
+//                         }
+
+//                         & .css-1pahdxg-control{
+//                             width: 100%;
+//                             margin-left: 5px;
+//                         }
+//                     }
+//                     & div.product-modal-edit-normal{
+//                         display:none;
+//                     }
+//                 }
+
+//                 & td.MuiTableCell-body.product-modal-edit-hidden{
+//                     // padding : 0;
+//                     overflow: visible;
+
+//                     & div.product-modal-edit-input{
+//                         display: none;
+//                     }
+                   
+//                 }
+
+//                 & td.MuiTableCell-body{
+
+//                     & div.MuiTextField-root{
+//                         display: none;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// .product-modal-footer{
+//     margin:auto;
+// }
+
+// .font-bolder{
+//     font-weight: bolder;
+// }
+
+// .product-reduce-margin-text{
+//     margin-top: 3px !important;
+//     margin-bottom: 1px !important;
+// }
+
+// .full-width{
+//     width : 100% !important;
+   
+// }
+
+// .product-circular-progress{
+//     width: 30px !important;
+//     height: 30px !important;
+//     position: absolute;
+// }
+
+// .uploading-processing{
+//     margin:auto !important;
+// }
+
+// .filter{
+//     padding:5px !important;
+
+//     & .input{
+//         margin: 0 !important;
+
+//         & .MuiInputBase-root input{
+//             padding:10px !important;
+//         }
+//     }
+// }
+
+// .popper-paper{
+//     width : 180px;
+//     margin-top : 5px;
+//     padding-top: 5px;
+//     box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12);
+
+//     & button{
+//         transform: scale(0.8);
+//     }
+
+//     & .selector{
+//         width : 90%;
+//     }
+// }
+
+.noWrap {
+    white-space: nowrap;
+}
+
+// .select-error{
+//     & div{
+//         border-color: #f44336;
+//         // font-size: 0.75rem;
+//     }
+// }
