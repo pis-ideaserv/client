@@ -21,7 +21,7 @@ export const Users = () => {
                 return;
             }
 
-            const a = await request({url     : Url.user,method  : 'GET',params  : true,data    : params})
+            const a = await request({url     : Url.user,method  : 'GET',params    : params})
 
             if (a.status === 200) {
                 dispatch({type    : pr.data,payload : a,});

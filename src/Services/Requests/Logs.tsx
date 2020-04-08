@@ -39,7 +39,6 @@ const Logs = (props:any):any => {
             format = await request({
                 url     : Url.logs+'?page='+logs.page+'&per_page='+logs.per_page,
                 method  : 'GET',
-                params  : false,
             })
             return processData(format);
         }

@@ -23,7 +23,7 @@ export const Suppliers = () => {
                 return;
             }
 
-            const a = await request({url     : Url.suppliers,method  : 'GET',params  : true,data    : params,})
+            const a = await request({url     : Url.suppliers,method  : 'GET',params    : params,})
 
             if (a.status === 200) {
                 dispatch({type    : sp.data,payload : a,});

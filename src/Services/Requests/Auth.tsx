@@ -2,10 +2,14 @@ import withRouterInnerRef from '../WithRouterInnerRef';
 import axios from 'axios';
 import Url from '../ServerUrl';
 import React from 'react';
-import {Format} from './StaticMethods';
+import {Format,request} from './StaticMethods';
 import {useSnackbar} from 'notistack'
 import { Button } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import {error as errorAction} from 'Redux/Actions';
+import {useDispatch} from 'react-redux';
+import { Token } from 'Services';
+
 
 
 interface credential{
@@ -18,12 +22,23 @@ interface credential{
 const Auth = (props:any) => {
     
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const dispatch = useDispatch();
+
 
     const action = (key:any) => (
         <Button variant="text" color="inherit" onClick={ () => closeSnackbar(key)}>
             <Close />
         </Button>
     );
+
+    const processData = (data:Format) =>{
+        if(data.network_error){
+            dispatch(errorAction(true));
+            return;
+        }else{
+            return data;
+        }
+    }
 
 
     React.useImperativeHandle(props.request,()=>({
@@ -36,34 +51,18 @@ const Auth = (props:any) => {
                 data : '',
             }
 
-            await axios({
-                method  :   "POST",
-                url     :   Url.login,
-                headers :   {
-                    'Content-Type' :    'application/json',
-                    'Accept'       :    'application/json',
+            format = await request({
+                url     : Url.login,
+                method  : 'POST',
+                header  : {
+                    'Content-Type'  :   'application/json',
+                    'Accept'        :   'application/json'
                 },
-                data    :   {
+                params  : {
                     username : credential.username,
                     password : credential.password,
-                }
-            }).then( response => {
-                format = {
-                    network_error : false,
-                    status        : response.status,
-                    data          : response.data,
-                }
-            }).catch( async (error) =>{
-                if(error.response){
-                    format = {
-                        network_error : false,
-                        status        : error.response.status,
-                        data          : error.response.data,
-                    }
-                }else{
-                    format.network_error = true;
-                }
-            });
+                },
+            })
 
             if(format.status !== 200 && format.status !== 401 || format.network_error ){
                 enqueueSnackbar(
@@ -83,6 +82,26 @@ const Auth = (props:any) => {
             }
 
             return format;
+        },
+
+        async me(){
+            const token = Token.get();
+            let format:Format = {
+                network_error : false,
+                status        : 0,
+                data          : '',
+            }
+            if(token === '' || token === null){
+                props.history.push('/login');
+                return;
+            }
+            format = await request({
+                url     : Url.me,
+                method  : 'GET',
+            })
+            
+            return processData(format);
+
         }
 
     }));

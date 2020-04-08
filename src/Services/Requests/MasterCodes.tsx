@@ -41,8 +41,7 @@ const MasterCodes = (props:any):any => {
             format = await request({
                 url     : Url.productMasterList,
                 method  : 'GET',
-                params  : true,
-                data    : user,
+                params    : user,
             })
             return processData(format);
         },
@@ -61,7 +60,6 @@ const MasterCodes = (props:any):any => {
             format = await request({
                 url     : Url.productMasterList+id,
                 method  : 'GET',
-                params  : false,
             })
             return processData(format);
         },
@@ -80,8 +78,7 @@ const MasterCodes = (props:any):any => {
             format = await request({
                 url     : Url.productMasterList+up.id,
                 method  : 'PATCH',
-                params  : true,
-                data    : up
+                params    : up
             })
             return processData(format);
         },
@@ -99,8 +96,7 @@ const MasterCodes = (props:any):any => {
             format = await request({
                 url     : Url.productMasterList,
                 method  : 'POST',
-                params  : true,
-                data    : pml
+                params    : pml
             });
             return processData(format);
         },
@@ -119,7 +115,6 @@ const MasterCodes = (props:any):any => {
             format = await request({
                 url     : Url.productMasterList+'?filter=true&'+params,
                 method  : 'GET',
-                params  : false,
             })
         },
     }));    

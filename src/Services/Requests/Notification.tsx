@@ -40,8 +40,7 @@ const Notification = (props:any):any => {
             format = await request({
                 url     : Url.notification,
                 method  : 'GET',
-                params  : true,
-                data    : user,
+                params    : user,
             })
             return processData(format);
         },
@@ -60,7 +59,6 @@ const Notification = (props:any):any => {
             format = await request({
                 url     : Url.notification+id,
                 method  : 'GET',
-                params  : false,
             })
             return processData(format);
         },
@@ -79,8 +77,7 @@ const Notification = (props:any):any => {
             format = await request({
                 url     : Url.notification,
                 method  : 'POST',
-                params  : true,
-                data    : pml
+                params    : pml
             });
             return processData(format);
         }

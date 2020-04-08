@@ -53,7 +53,6 @@ const User = (props:any):any => {
             format = await request({
                 url     : Url.user+'?page='+user.page+'&per_page='+user.per_page,
                 method  : 'GET',
-                params  : false,
             })
             return processData(format);
         },
@@ -74,7 +73,6 @@ const User = (props:any):any => {
             format = await request({
                 url     : Url.user+id,
                 method  : 'GET',
-                params  : false,
             })
             return processData(format);
         },
@@ -94,8 +92,7 @@ const User = (props:any):any => {
             format = await request({
                 url     : Url.user+user.id,
                 method  : 'PATCH',
-                params  : true,
-                data    : user
+                params    : user
             })
             return processData(format);
         },
@@ -114,8 +111,7 @@ const User = (props:any):any => {
             format = await request({
                 url     : Url.user,
                 method  : 'POST',
-                params  : true,
-                data    : user
+                params    : user
             })
             return processData(format);
         },
@@ -134,7 +130,6 @@ const User = (props:any):any => {
             format = await request({
                 url     : Url.user+'?search='+search,
                 method  : 'GET',
-                params  : false,
             })
         },
 
@@ -153,7 +148,6 @@ const User = (props:any):any => {
             format = await request({
                 url     : Url.user+'?filter=true&'+params,
                 method  : 'GET',
-                params  : false,
             })
         }
 

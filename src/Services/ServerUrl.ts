@@ -1,4 +1,4 @@
-const server_url = '/api/';
+const server_url = 'http://localhost:8000/api/';
 
 const prefix={
     auth        : 'auth/',
@@ -17,7 +17,7 @@ const Url = {
     login     :   server_url+prefix.auth+'login',
     logout    :   server_url+prefix.auth+'logout',
     refresh   :   server_url+prefix.auth+'refresh',
-    check     :   server_url+prefix.auth+'check',
+    me        :   server_url+prefix.auth+'me',
 
     //user
     user       : server_url+prefix.user,
