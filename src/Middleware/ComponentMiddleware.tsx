@@ -15,26 +15,46 @@ const ComponentMiddleware =(props:any) =>{
     
     useEffect(()=>{
         check();
-    },[Token.exist()]);
+    });
 
     const check = async () => {
-        if(Token.exist()){
-            if(Object.keys(user).length === 0){
-                const token:any = jwt_decode(Token.get());
-                const useraccount = await userRequest.current.get(token.sub);
 
-                if(useraccount.status === 200){
-                    dispatch(User(useraccount.data.data));
-                    dispatch(loggedIn(true));
-                    // setInitialized(true);
-                }else{
-                    Token.remove();
-                }
-            }
-        }else{
-            dispatch(loggedIn(false));
-        }
-        setFinish(true);
+        console.log(Token.exist());
+        // let userData = Object.keys(user).length; 
+
+        // if (Token.exist() && userData === 0){
+
+        //     setFinish(true);
+        // }
+
+        // if(!Token.exist()){
+        //     dispatch(loggedIn(false));
+        //     setFinish(true);
+        // }
+
+
+
+
+
+        // if(Token.exist()){
+        //     if(Object.keys(user).length === 0){
+        //         const token:any = jwt_decode(Token.get());
+        //         const useraccount = await userRequest.current.get(token.sub);
+
+        //         if(useraccount.status === 200){
+        //             dispatch(User(useraccount.data.data));
+        //             dispatch(loggedIn(true));
+        //             // setInitialized(true);
+        //         }else{
+        //             Token.remove();
+        //         }
+        //     }
+        // }else{
+        //     dispatch(loggedIn(false));
+        // }
+        // setFinish(true);
+
+        // console.log('sdsd');
     }
 
 
