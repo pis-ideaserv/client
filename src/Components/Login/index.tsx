@@ -69,6 +69,7 @@ const Login = (props:any) => {
                         password : "",
                     });
                     setSubmit(false);
+                    console.log(a);
                     // setError({
                     //     status : true,
                     //     message: "Something wrong with the server, please try again later!!!!"

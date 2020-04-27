@@ -39,8 +39,7 @@ const Category = (props:any):any => {
             format = await request({
                 url     : Url.category,
                 method  : 'GET',
-                params  : true,
-                data    : user,
+                params    : user,
             })
             return processData(format);
         },
@@ -59,10 +58,10 @@ const Category = (props:any):any => {
             format = await request({
                 url     : Url.category+user,
                 method  : 'GET',
-                params  : false
             })
             return processData(format);
         },
+
         add : async(pml:add) => {
             const token = Token.get();
             let format:Format = {
@@ -77,8 +76,7 @@ const Category = (props:any):any => {
             format = await request({
                 url     : Url.category,
                 method  : 'POST',
-                params  : true,
-                data    : pml,
+                params    : pml,
             })
             return processData(format);
         },

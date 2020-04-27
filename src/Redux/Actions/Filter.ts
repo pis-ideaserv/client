@@ -47,7 +47,6 @@ export const Filter = (filter:any,component:component,extra_params:params) => {
                 const a = await request({
                     url     : Url.suppliers+'?filter='+JSON.stringify(filter),
                     method  : 'GET',
-                    params  : false,
                 })
 
 
@@ -92,7 +91,6 @@ export const Filter = (filter:any,component:component,extra_params:params) => {
                 const a = await request({
                     url     : Url.products+'?filter='+JSON.stringify(filter),
                     method  : 'GET',
-                    params  : false,
                 })
 
                 
@@ -134,7 +132,6 @@ export const Filter = (filter:any,component:component,extra_params:params) => {
                 const a = await request({
                     url     : Url.user+'?filter=true&'+params,
                     method  : 'GET',
-                    params  : false,
                 })
 
 
@@ -176,7 +173,6 @@ export const Filter = (filter:any,component:component,extra_params:params) => {
                 const a = await request({
                     url     : Url.productMasterList+'?filter=true&'+params,
                     method  : 'GET',
-                    params  : false,
                 })
 
 
