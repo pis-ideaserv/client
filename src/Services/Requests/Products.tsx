@@ -65,7 +65,8 @@ const Products = (props:any):any => {
             format = await request({
                 url     : Url.products,
                 method  : 'GET',
-                params    : user,
+                params  : true,
+                data    : user,
             })
             return processData(format);
         },
@@ -84,6 +85,7 @@ const Products = (props:any):any => {
             format = await request({
                 url     :  Url.user+id,
                 method  : 'GET',
+                params  : false,
             })
             return processData(format);
         },
@@ -102,7 +104,8 @@ const Products = (props:any):any => {
             format = await request({
                 url     :  Url.products+product.id,
                 method  : 'PATCH',
-                params    : product
+                params  : true,
+                data    : product
             })
             return processData(format);
         },
@@ -121,7 +124,8 @@ const Products = (props:any):any => {
             format = await request({
                 url     :  Url.products,
                 method  : 'POST',
-                params    : product
+                params  : true,
+                data    : product
             })
             return processData(format);
         },
@@ -140,6 +144,7 @@ const Products = (props:any):any => {
             format = await request({
                 url     :  Url.products+'?search='+search,
                 method  : 'GET',
+                params  : false
             })
             return processData(format);
         },
@@ -161,6 +166,7 @@ const Products = (props:any):any => {
             format = await request({
                 url     : Url.products+'?filter=true&'+params,
                 method  : 'GET',
+                params  : false,
             })
         },
 

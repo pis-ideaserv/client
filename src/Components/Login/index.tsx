@@ -53,18 +53,15 @@ const Login = (props:any) => {
                     setSubmit(false);
                     setError({
                         status : true,
-                        message: a.data.message
+                        message: "Credentials does not exist!!"
                     });
                     break;
                 case 200 :
                     Token.save(a.data.token);
-                    // const jwt:any = jwt_decode(Token.get()); // get id of current user using JWT payload
+                    const jwt:any = jwt_decode(Token.get()); // get id of current user using JWT payload
 
-                    // const users =await userRef.current.get(jwt.sub);
-                    // checkUser(users);
-                    // console.log(props.location.state);
-
-                    props.history.push(props.location.from);
+                    const users =await userRef.current.get(jwt.sub);
+                    checkUser(users);
                     break;
                 default :
                     setCredentials({
@@ -72,7 +69,6 @@ const Login = (props:any) => {
                         password : "",
                     });
                     setSubmit(false);
-                    // console.log(a);
                     // setError({
                     //     status : true,
                     //     message: "Something wrong with the server, please try again later!!!!"

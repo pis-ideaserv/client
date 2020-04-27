@@ -31,7 +31,8 @@ export const Products = () => {
             const a = await request({
                 url     : Url.products,
                 method  : 'GET',
-                params    : params
+                params  : true,
+                data    : params
             })
 
 

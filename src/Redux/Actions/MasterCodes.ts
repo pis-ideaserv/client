@@ -21,7 +21,7 @@ export const MasterCodes = () => {
             return;
         }
 
-        const a = await request({url     : Url.productMasterList,method  : 'GET',params    : params})
+        const a = await request({url     : Url.productMasterList,method  : 'GET',params  : true,data    : params})
 
         if (a.status === 200) {
             dispatch({type    : MC.data,payload : a});

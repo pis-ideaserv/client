@@ -8,5 +8,5 @@ export {Filter} from './Filter';
 export {MasterCodes,MasterCodeParams} from './MasterCodes';
 export {Activities,ActivitiesParams} from './Activities';
 export {Category} from './Category';
-export { error, loggedIn, called } from './status';
+export { error, loggedIn } from './status';
 export {NotificationsParams,Notifications} from './Notifications';

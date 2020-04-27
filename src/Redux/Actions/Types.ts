@@ -39,9 +39,7 @@ export const Search             = {
 
 export const status = {
     error       : 'error',
-    loggedIn    : 'loggedIn',
-    called      : 'called',
-    
+    loggedIn    : 'loggedIn', 
 }
 
 export const Activities  = {

@@ -12,7 +12,8 @@ export const Navigation = [
         component   : Component.Login,
         middleware  : LoginMiddleware,
         exact       : false,
-    },{
+    }
+    ,{
         path        : "/products",
         component   : Component.Products,
         middleware  : ComponentMiddleware,

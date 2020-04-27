@@ -35,6 +35,7 @@ const Status = (props:any):any => {
             format = await request({
                 url     : Url.status,
                 method  : 'GET',
+                params  : false,
             })
             return processData(format);
         }

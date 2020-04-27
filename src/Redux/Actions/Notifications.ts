@@ -21,7 +21,7 @@ export const Notifications = () => {
             return;
         }
         
-        const a = await request({url     : Url.notification,method  : 'GET',params    : params})   
+        const a = await request({url     : Url.notification,method  : 'GET',params  : true,data    : params})   
 
         if (a.status === 200) {
             dispatch({type    : act.data,payload : a});

@@ -54,7 +54,8 @@ const Suppliers = (props:any):any =>{
             format = await request({
                 url     : Url.suppliers,
                 method  : 'GET',
-                params    : user,
+                params  : true,
+                data    : user,
             })
             return processData(format);
         },
@@ -73,6 +74,7 @@ const Suppliers = (props:any):any =>{
             format = await request({
                 url     : Url.suppliers+id,
                 method  : 'GET',
+                params  : false,
             })
             return processData(format);
         },
@@ -92,7 +94,8 @@ const Suppliers = (props:any):any =>{
             format = await request({
                 url     : Url.suppliers+supplier.id,
                 method  : 'PATCH',
-                params    : supplier
+                params  : true,
+                data    : supplier
             })
             return processData(format);
         },
@@ -111,7 +114,8 @@ const Suppliers = (props:any):any =>{
             format = await request({
                 url     : Url.suppliers,
                 method  : 'POST',
-                params    : supplier
+                params  : true,
+                data    : supplier
             })
             return processData(format);
         },
@@ -130,6 +134,7 @@ const Suppliers = (props:any):any =>{
             format = await request({
                 url     : Url.suppliers+'?search='+search,
                 method  : 'GET',
+                params  : false,
             })
         },
 
@@ -149,6 +154,7 @@ const Suppliers = (props:any):any =>{
             format = await request({
                 url     : Url.suppliers+'?filter=true&'+params,
                 method  : 'GET',
+                params  : false,
             })
         }
 

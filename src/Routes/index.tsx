@@ -16,8 +16,12 @@ const Navigations = (props:any) =>{
                 <div className="container">
                     <Caller />
                     <BrowserRouter> 
-                        {status ? <Component.Navigation />: ''}
+                        {status ? 
+                            
+                            <Component.Navigation />
+                        : ''}
                         <Switch>
+                            
                             {
                                 Navigation.map((element,index) => 
                                     <Route 
