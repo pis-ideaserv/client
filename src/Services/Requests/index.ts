@@ -10,3 +10,4 @@ export {default as Category} from './Category';
 export {default as Logs} from './Logs';
 export {default as Status} from './Status';
 export {default as Notification} from './Notification';
+export {default as Snapshot} from './Snapshot';

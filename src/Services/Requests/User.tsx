@@ -9,8 +9,9 @@ import withRouterInnerRef from '../WithRouterInnerRef';
 
 
 interface Show{
-    page        : number,
-    per_page    : number
+    page        ?: number,
+    per_page    ?: number,
+    snapshot    ?: number,
 }
 
 interface Users{

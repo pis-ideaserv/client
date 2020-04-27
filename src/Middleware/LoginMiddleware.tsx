@@ -28,6 +28,7 @@ const LoginMiddleware=(props:any) => {
     }
 
     return <Login {...props} />;
+
 }
 
 export default withRouter(LoginMiddleware);

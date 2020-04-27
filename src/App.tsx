@@ -6,7 +6,10 @@ import { SnackbarProvider } from 'notistack';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import './App.scss';
+import pouchdb from 'pouchdb';
+
 const App = () => {
+
     return(
         <Provider store={store}>
             <SnackbarProvider 

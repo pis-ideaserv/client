@@ -7,8 +7,9 @@ import {error} from 'Redux/Actions';
 import withRouterInnerRef from '../WithRouterInnerRef';
 
 interface showMasterCodes{
-    page : number,
-    per_page ?: number,
+    page        ?: number,
+    per_page    ?: number,
+    snapshot    ?: number,
 }
 
 const Notification = (props:any):any => {

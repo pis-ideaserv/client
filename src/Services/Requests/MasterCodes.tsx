@@ -7,9 +7,10 @@ import {error} from 'Redux/Actions';
 import withRouterInnerRef from '../WithRouterInnerRef';
 
 interface showMasterCodes{
-    page : number,
-    per_page : number,
-    search ?: any,
+    page        ?: number,
+    per_page    ?: number,
+    search      ?: any,
+    snapshot    ?: number,
 }
 
 const MasterCodes = (props:any):any => {

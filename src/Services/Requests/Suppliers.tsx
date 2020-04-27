@@ -20,9 +20,10 @@ interface Supplier{
 
 
 interface showSupplier{
-    page : number,
-    per_page : number,
-    search  ?: string
+    page        ?: number,
+    per_page    ?: number,
+    search      ?: string,
+    snapshot    ?: number,
 }
 
 

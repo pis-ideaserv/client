@@ -8,3 +8,4 @@ export {default as Suppliers} from './Main/Suppliers';
 export {default as Users} from './Main/Users';
 export {default as NotFound} from './NotFound';
 export {default as Summary} from './Main/Summary';
+export {default as Sync} from './Sync';

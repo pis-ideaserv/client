@@ -5,9 +5,15 @@ import Url from '../ServerUrl';
 import {request,Format} from './StaticMethods';
 import {error as errorAction} from 'Redux/Actions';
 import {useDispatch} from 'react-redux';
+import pouchdb from 'pouchdb';
 
 
-interface show{page : number,per_page : number,search?:string};
+interface show{
+    page        ?:  number,
+    per_page    ?:  number,
+    search      ?:  string,
+    snapshot    ?:  number,
+};
 interface add{name : string}
 
 
@@ -64,6 +70,7 @@ const Category = (props:any):any => {
 
         add : async(pml:add) => {
             const token = Token.get();
+
             let format:Format = {
                 network_error : false,
                 status        : 0,
@@ -79,7 +86,7 @@ const Category = (props:any):any => {
                 params    : pml,
             })
             return processData(format);
-        },
+        }
     }));
 
     return null;

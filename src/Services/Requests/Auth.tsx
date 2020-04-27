@@ -54,7 +54,7 @@ const Auth = (props:any) => {
             format = await request({
                 url     : Url.login,
                 method  : 'POST',
-                header  : {
+                headers  : {
                     'Content-Type'  :   'application/json',
                     'Accept'        :   'application/json'
                 },
@@ -84,7 +84,7 @@ const Auth = (props:any) => {
             return format;
         },
 
-        async me(){
+        async show(){
             const token = Token.get();
             let format:Format = {
                 network_error : false,

@@ -7,8 +7,9 @@ import {error} from 'Redux/Actions';
 import withRouterInnerRef from '../WithRouterInnerRef';
 
 interface show{
-    page : number,
-    per_page : number,
+    page        ?: number,
+    per_page    ?: number,
+    snapshot    ?: number,
 }
 
 const Logs = (props:any):any => {
@@ -37,11 +38,12 @@ const Logs = (props:any):any => {
                 return;
             }
             format = await request({
-                url     : Url.logs+'?page='+logs.page+'&per_page='+logs.per_page,
+                url     : Url.logs,
                 method  : 'GET',
+                params  : logs,
             })
             return processData(format);
-        }
+        },
     }));
 
     return null;

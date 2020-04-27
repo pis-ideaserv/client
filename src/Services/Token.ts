@@ -83,8 +83,8 @@ export default class Token{
     public static save(token:any):void{
         // this.remove();
         let a = new Date();
-        a.setMinutes(a.getMinutes() + 43800); //1440 1 day
-
+        // a.setMinutes(a.getMinutes() + 43800); //1440 1 day
+        a.setDate(a.getDate() + 30);
         const cookies = new Cookies();
         cookies.set('token',token,{
             expires: a,

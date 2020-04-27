@@ -30,9 +30,10 @@ interface Products extends Product{
 }
 
 interface showProduct{
-    page : number,
-    per_page : number,
-    search ?: string,
+    page        ?: number,
+    per_page    ?: number,
+    search      ?: string,
+    snapshot    ?: number,
 }
 
 

@@ -4,7 +4,7 @@ import * as Component from 'Components';
 import {Navigation} from './Navigation';
 import { useSelector } from 'react-redux';
 import Error from './Error';
-import Caller from 'Services/Caller';
+// import Caller from 'Services/Caller';
 
 const Navigations = (props:any) =>{
 
@@ -14,7 +14,7 @@ const Navigations = (props:any) =>{
         <React.Fragment>
             <div className="container-body">
                 <div className="container">
-                    <Caller />
+                    {/* <Caller /> */}
                     <BrowserRouter> 
                         {status ? <Component.Navigation />: ''}
                         <Switch>
