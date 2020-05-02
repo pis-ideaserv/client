@@ -111,7 +111,7 @@
             margin-left:10px;
         }
 
-        & table{
+        & div.custom-pagination{
             flex:1
         }
         
@@ -323,3 +323,26 @@ td.selected-column{
     height: 30px !important;
     position: absolute;
 }
+
+.container{
+    width: auto;
+}
+
+// @media (min-width: 576px) {
+
+// }
+
+// @media (min-width: 768px) {
+
+// }
+// @media (min-width: 992px) {
+
+// }
+
+// @media (min-width: 1200px) {
+
+// }
+
+// .container{
+//     max-width : 100%;
+// }

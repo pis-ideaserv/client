@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationTitle,Users as user,Filter as Filterer,UsersFilter } from 'Redux/Actions';
+import { NavigationTitle,Users as user,Filter as Filterer,UsersFilter, UsersParams } from 'Redux/Actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -16,7 +16,6 @@ import Add from './Add';
 const Users = (props:any) =>{
 
     const userRequest:any = React.useRef();
-    const [ params, setParams] = React.useState({page:1,per_page:10});
     const [filter, setFilter] = React.useState({
         username        : {filter:'iet',key:''},
         name            : {filter:'iet',key:''},
@@ -57,21 +56,17 @@ const Users = (props:any) =>{
     const [modalEdit, setModalEdit] = React.useState(false);
     const [modalAdd, setModalAdd]   = React.useState(false);
     const [submit,setSubmit]        = React.useState(false);
-    const [users, setUsers]   = React.useState();
+    const [users, setUsers]   = React.useState(null);
     const [usersInput, setUsersInput] = React.useState(initUsers);
     const [responseMessage, setResponseMessage] = React.useState(initUsersError);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar(); //snackbar
-    const [ ] = React.useState(0);
 
     //global state
     const usersState =  useSelector ( (state:any) => state.Users );
-
     const dispatch = useDispatch();
 
     React.useEffect(()=>{
         dispatch(NavigationTitle({control:'users'}));
-        // dispatch(Filterer(filter,"user",params));
-        dispatch(user())
 
         window.addEventListener('scroll', scroll, true);
         return () =>{
@@ -129,19 +124,16 @@ const Users = (props:any) =>{
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number,) =>{
         // setPage(newPage);
 
-        let pams:any = params;
-        params.page=newPage+1;
-        setParams(pams);
-
+        let pams:any = usersState.params;
+        pams.page=newPage+1;
+        dispatch(UsersParams(pams));
         dispatch(Filterer(filter,"user",pams));
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         const val:any = event.target.value;
-        
         let paran = {page:1,per_page:val};
-
-        setParams(paran);
+        dispatch(UsersParams(paran));
         dispatch(Filterer(filter,"user",paran));
     };
 
@@ -346,7 +338,7 @@ const Users = (props:any) =>{
                         </TableHead>
                         
                         <TableBody>
-                            <Filter filter={filter} setFilter={setFilter} params={params} setParams={setParams}/>
+                            <Filter filter={filter} setFilter={setFilter} />
                             {
                                 usersState.data ?
                                     usersState.data.data.data.map((key:any,id:number)=>(
@@ -368,23 +360,18 @@ const Users = (props:any) =>{
                     <Button onClick={ () =>initModalAdd()} variant="contained" color="primary" className="product-add-new">
                         ADD NEW
                     </Button>
-
-                    <Table>
-                        <tbody>
-                            <tr>
-                                <TablePagination
-                                    rowsPerPageOptions={[10,25,50,100]}
-                                    colSpan={0}
-                                    count={usersState.data ? usersState.data.data.meta.total : 10}
-                                    rowsPerPage={params.per_page}
-                                    page={usersState.data ? params.page-1 : 0}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                />
-                            </tr>
-                        </tbody>
-                    </Table>
+                    <TablePagination
+                        rowsPerPageOptions={[10,25,50,100]}
+                        colSpan={0}
+                        component="div"
+                        count={usersState.data ? usersState.data.data.meta.total : 10}
+                        rowsPerPage={usersState.params.per_page}
+                        page={usersState.data ? usersState.params.page-1 : 0}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                        className="custom-pagination"
+                    />
                 </div>
             </Paper>
         </React.Fragment>

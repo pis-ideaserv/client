@@ -11,7 +11,7 @@ import SidebarList from './SidebarList';
 import { withRouter } from 'react-router';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
-import {loggedIn} from 'Redux/Actions';
+import {loggedIn,caller} from 'Redux/Actions';
 import { Dropbox, VanUtility, Account, ProgressWrench  } from 'mdi-material-ui';
 import Notification from 'Components/Notification';
 
@@ -48,10 +48,10 @@ const Navigation = (props:any) => {
 			url  : "/users", 
 			props: '',
 		},{
-			name : "Activities",
-			control : "activities",
+			name : "Reports",
+			control : "reports",
 			icon :  Assessment,
-			url  : "/activities", 
+			url  : "/reports", 
 			props: '',
 		}
 	];
@@ -223,7 +223,9 @@ const Navigation = (props:any) => {
 				toggleSidebar	= {toggleSidebar}
 			/>
 			
-			<Notification />
+			{
+				reduxUser.level !== 3 ? <Notification /> : ''
+			}
 			<Backdrop open={sidebar} onClick={toggleSidebar} className="backdrop-desktop disable-z-index"/>
 			<Backdrop open={search} onClick={ () => toggleSearch(false) } className="backdrop-search disable-z-index"/>
 		</div>

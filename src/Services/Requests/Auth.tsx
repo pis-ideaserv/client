@@ -1,5 +1,4 @@
 import withRouterInnerRef from '../WithRouterInnerRef';
-import axios from 'axios';
 import Url from '../ServerUrl';
 import React from 'react';
 import {Format,request} from './StaticMethods';
@@ -45,7 +44,7 @@ const Auth = (props:any) => {
         
         async login(credential:credential){
            
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status : 0,
                 data : '',
@@ -54,7 +53,7 @@ const Auth = (props:any) => {
             format = await request({
                 url     : Url.login,
                 method  : 'POST',
-                header  : {
+                headers  : {
                     'Content-Type'  :   'application/json',
                     'Accept'        :   'application/json'
                 },
@@ -86,7 +85,7 @@ const Auth = (props:any) => {
 
         async me(){
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',

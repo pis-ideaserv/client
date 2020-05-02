@@ -4,11 +4,11 @@ import { request } from 'Services/Requests/StaticMethods';
 import Url from 'Services/ServerUrl';
 
 
-export const Notifications = () => {
+export const Notifications = (params?:any) => {
     return async (dispatch:any,getState:any) => {
         
-        let tempActivities = getState().Activities.data;
-        let params = getState().Activities.params;
+        let tempActivities = getState().Notifications.data;
+        // let params = getState().Notifications.params;
 
         dispatch({type    : act.data,payload : '',});
         dispatch({type    : act.status,payload : 'pending',});
@@ -29,12 +29,10 @@ export const Notifications = () => {
             return;
         }
 
-        if(a.network_error){
-            dispatch({type    : status.error,payload : true,});
-            dispatch({type    : act.data,payload:tempActivities});
-            dispatch({type    : act.status,payload : 'done',});
-            return;
-        }
+        dispatch({type    : status.error,payload : true,});
+        dispatch({type    : act.data,payload:tempActivities});
+        dispatch({type    : act.status,payload : 'done',});
+        return;
     }
 }
 

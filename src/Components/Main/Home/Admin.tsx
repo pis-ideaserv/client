@@ -1,12 +1,11 @@
 import React from 'react';
-import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogContentText, FormControl, InputLabel, Select, MenuItem, FormControlLabel, DialogActions } from '@material-ui/core';
+import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { Dropbox, VanUtility, Account } from 'mdi-material-ui';
 import { ArrowForward } from '@material-ui/icons';
-import {withRouter, Switch} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import { Requests } from 'Services';
 import Skeleton from '@material-ui/lab/Skeleton';
 import moment from 'moment';
-import {Suppliers,Users,Products} from "Redux/Actions"
 import {useDispatch, useSelector} from "react-redux";
 import Chart from 'react-google-charts';
 
@@ -15,104 +14,14 @@ const Admin = ( props :any ) => {
     const logsRequest:any = React.useRef();
     const statusRequest:any = React.useRef();
 
-    const dispatch = useDispatch();
     const users = useSelector((state:any) => state.Users.data); 
     const products = useSelector((state:any) => state.Products.data); 
     const suppliers = useSelector((state:any) => state.Suppliers.data);
-    const [status,setStatus] = React.useState();
-
-    React.useEffect(()=>{
-        requestLog();
-    },[]);
-
-
-    const requestLog = () => {
-
-        // dispatch(Suppliers({page:1,per_page:10}));
-        // dispatch(Users({page:1,per_page:10}));
-        // dispatch(Products({page:1,per_page:10}));
-
-        setData(null);
-        // const a = Requests.Logs.show({per_page:rowsPerPage,page:page}).then((response:any)=>{
-        //     setData(response.data);
-        // });
-
-        const a = logsRequest.current.show({per_page:rowsPerPage,page:page}).then((response:any)=>{
-            setData(response.data);     
-        });
-        
-
-
-        //status
-
-        // Requests.Status.show().then((response:any)=>{
-        //     // setStatus(response.data);
-
-        //     setStatus([
-        //         ['Task','Products Status'],
-        //         ['New',response.data.status.New],
-        //         ['Replaced',response.data.status.Replaced],
-        //         ['Returned',response.data.status.Returned],
-        //         ['Repaired',response.data.status.Repaired],
-        //     ]);
-        // });
-
-        statusRequest.current.show().then((response:any)=>{
-            // setStatus(response.data);
-
-            setStatus([
-                ['Task','Products Status'],
-                ['New',response.data.status.New],
-                ['Replaced',response.data.status.Replaced],
-                ['Returned',response.data.status.Returned],
-                ['Repaired',response.data.status.Repaired],
-            ]);
-        });
-    }
-
-    // console.log(status);
-
-
-    const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [data, setData] = React.useState();
+    const graph = useSelector((state:any) => state.Products.graph.data);
+    const data = useSelector((state:any) => state.Logs.data);
     const [open, setOpen] = React.useState(false);
     const [modal,setModal] = React.useState();
     const [target,setTarget] = React.useState();
-
-
-    const handleChangePage = (event:any, newPage:any) => {
-        setPage(newPage+1);
-        
-        
-
-        //there is a delay when updating state. so instead of {per_page:rowsPerPage,page:page}, we replaced {per_page:rowsPerPage,page:newPage+1} for instant update
-        setData(null);
-        // const a = Requests.Logs.show({per_page:rowsPerPage,page:newPage+1}).then((response:any)=>{
-        //     setData(response.data);
-        // });
-
-        logsRequest.current.show({per_page:rowsPerPage,page:newPage+1}).then((response:any)=>{
-            setData(response.data);
-        });
-
-    };
-    
-    const handleChangeRowsPerPage = (event:any) => {
-        if(event.target.value !== rowsPerPage ){
-            setRowsPerPage(event.target.value);
-            setPage(1);
-
-            setData(null);
-            // const a = Requests.Logs.show({per_page:event.target.value,page:1}).then((response:any)=>{
-            //     setData(response.data);
-            // });
-            logsRequest.current.show({per_page:event.target.value,page:1}).then((response:any)=>{
-                setData(response.data);
-            });
-        }        
-    };
-
     
     const skeletonTable = () => {
         let a:any = [];
@@ -375,19 +284,30 @@ const Admin = ( props :any ) => {
                 </div>
             </div>
             <Paper className="admin-pie-graph col-6 offset-3">
-                <Chart
-                    width={'100%'}
-                    height={'100%   '}
-                    chartType="PieChart"
-                    loader={<div>Loading Chart</div>}
-                    data={status}
-                    options={{
-                        title: 'Products Status',
-                        // Just add this option
-                        is3D: true,
-                    }}
-                    rootProps={{ 'data-testid': '2' }}
-                />
+                {
+                    graph !== undefined ?
+                        <Chart
+                            width={'100%'}
+                            height={'100%'}
+                            chartType="PieChart"
+                            loader={<div>Loading Chart</div>}
+                            data={[
+                                ['Task','Products Status'],
+                                ['New',graph.status.New],
+                                ['Replaced',graph.status.Replaced],
+                                ['Returned',graph.status.Returned],
+                                ['Repaired', graph.status.Repaired],
+                            ]}
+                            options={{
+                                title: 'Products Status',
+                                // Just add this option
+                                is3D: true,
+                            }}
+                            rootProps={{ 'data-testid': '2' }}
+                        />
+                    : ''
+                }
+               
             </Paper>
 
             <Paper style={{whiteSpace:'nowrap'}} className="paper">
@@ -409,7 +329,7 @@ const Admin = ( props :any ) => {
                         <TableBody>
                             {
                                 data ?
-                                data.data.map( (value:any,key:any) =>
+                                data.data.data.slice(0,10).map( (value:any,key:any) =>
                                     <TableRow key={value.id} hover>
                                         <TableCell>{moment(value.updated_at).format('ll, h:mm a')}</TableCell>
                                         <TableCell style={{textTransform:'uppercase'}}>{value.user.first_name+" "+value.user.last_name}</TableCell>
@@ -448,21 +368,6 @@ const Admin = ( props :any ) => {
                 <Button onClick={()=>props.history.push('/activities')} size="small" variant="contained" color="primary" className="footer-button">
                     More info <ArrowForward />
                 </Button>
-                {/* <TablePagination
-                    rowsPerPageOptions={[10,25,50,100]}
-                    component="div"
-                    count={data ? data.meta.total : 10}
-                    rowsPerPage={rowsPerPage}
-                    page={data ? page-1 : 0}
-                    backIconButtonProps={{
-                        'aria-label': 'previous page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'next page',
-                    }}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                /> */}
             </Paper>
         </div>
     );

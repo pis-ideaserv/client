@@ -15,7 +15,7 @@ const Notification = (props:any):any => {
 
     const dispatch = useDispatch();
 
-    const processData = (data:Format) =>{
+    const processData = (data:any) =>{
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -28,7 +28,7 @@ const Notification = (props:any):any => {
         
         show    : async(user:showMasterCodes)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -47,7 +47,7 @@ const Notification = (props:any):any => {
 
         get     : async(id:number)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -65,7 +65,7 @@ const Notification = (props:any):any => {
 
         add     : async(pml:any)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',

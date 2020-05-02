@@ -1,8 +1,15 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Paper, Table, TableBody, TableRow, TableCell, TablePagination, TableHead, Button, Dialog, DialogContent, CircularProgress, Fab } from '@material-ui/core';
+import { Paper, Table, TableBody, TableRow, TableCell, TablePagination, TableHead, Button, Fab } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
-import { Products as productRedux,ProductsFilter , Filter as Filterer,NavigationTitle,MasterCodes,ProductsTable} from 'Redux/Actions';
+import { 
+    Products as productRedux,
+    ProductsFilter ,
+    ProductsParams , 
+    Filter as Filterer,
+    NavigationTitle,
+    
+} from 'Redux/Actions';
 import { withRouter } from 'react-router-dom';
 import Skeleton from '@material-ui/lab/Skeleton';
 import './ProductsStyle.scss';
@@ -14,7 +21,6 @@ import Filter from './Filter';
 import Add from './Add';
 import Show from './Show';
 import Edit from './Edit';
-// import Upload from './Upload';
 import TableOrder from './TableOrder';
 import Upload from 'Components/Upload';
 
@@ -25,7 +31,6 @@ const Products = (props:any) =>{
         id                          : {error:false,message:''},
         supplier                    : {error:false,message:''},
         product                     : {error:false,message:''},
-        // product_description         : {error:false,message:''},
         delivery_date               : {error:false,message:''},
         reference_delivery_document : {error:false,message:''},
         serial_number               : {error:false,message:''},
@@ -39,7 +44,6 @@ const Products = (props:any) =>{
         id                  : '',
         supplier            : '',
         product             : '',
-        // product_description : '', 
         delivery_date       : '',
         reference_delivery_document : '',
         serial_number       : '',
@@ -66,14 +70,14 @@ const Products = (props:any) =>{
         created_by          : {filter:'iet',key:''},
         remarks             : {filter:'iet',key:''},
     }
-    const initParams = {page     : 1,per_page : 10}
+    // const initParams = {page     : 1,per_page : 10}
 
 
-    const [ params, setParams ] = React.useState(initParams);
+    // const [ params, setParams ] = React.useState(initParams);
     const [ modalEdit, setModalEdit ] = React.useState(false);  // for showing edit modal
     const [ modalShow, setModalShow ] = React.useState(false);
     const [ modalAdd, setModalAdd ] = React.useState(false);    
-    const [ product, setProduct ] = React.useState();   // for holding product info by id
+    const [ product, setProduct ] = React.useState(null);   // for holding product info by id
     const [ submit, setSubmit ] = React.useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar(); //snackbar
     const [ upload,setUpload ] = React.useState(false);
@@ -101,12 +105,8 @@ const Products = (props:any) =>{
 
     useEffect(()=>{
     
-        dispatch(NavigationTitle({control:'products'}));        
-        dispatch(productRedux());
-        // dispatch(Filterer(filter,"product",params));
+        dispatch(NavigationTitle({control:'products'}));    
         window.addEventListener('scroll', scroll, true);
-
-        
         return () =>{
             window.removeEventListener('scroll', scroll);
         }
@@ -125,7 +125,6 @@ const Products = (props:any) =>{
                     selector[i].style.background = 'white';
                     selector[i].style.color = 'unset';
                 }
-
                 selector[i].style.top = style;
             }
         }
@@ -136,9 +135,6 @@ const Products = (props:any) =>{
         }
     }
 
-
-
-    
     const actions = (key:any) => (
         <Button onClick={() => { closeSnackbar(key) }}>
             <div style={{color:"white"}}><Close /></div>
@@ -152,28 +148,18 @@ const Products = (props:any) =>{
 
     
     
-    // const productInterval = setInterval( async () =>{
-    //     if(productState !== '' && productState.status!== 200){
-    //         props.history.push('/login');
-    //     }
-    //     products(productRedux(params));
-    // },30000);
-    
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number,) =>{
-        let pams:any = params;
-        params.page=newPage+1;
-        setParams(pams);
-
+        let pams:any = products.params;
+        pams.page=newPage+1;
+        dispatch(ProductsParams(pams));
         dispatch(Filterer(filter,"product",pams));
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         const val:any = event.target.value;
         let paran = {page:1,per_page:val};
-
-        setParams(paran);
-        dispatch(Filterer(filter,"product",paran));
-        
+        dispatch(ProductsParams(paran));
+        dispatch(Filterer(filter,"product",paran))
     };
 
     const uploadFile = () => {
@@ -191,77 +177,6 @@ const Products = (props:any) =>{
             }
         }
     }
-
-    // const uploadSheet = async (file:File) => {
-
-        
-    //     setUpload({
-    //         ...upload,
-    //         uploading : true,
-    //     });
-
-    //     let response = await Requests.Products.addFile(file);
-
-    //     switch(response.status){
-    //         case 406 :
-    //             enqueueSnackbar("Spreadsheet format is invalid",{variant:'error',action:actions});
-    //             togglePointerEvents(true);
-    //             setUpload({
-    //                 ...upload,
-    //                 uploading : false,
-    //             });
-    //             return;
-    //         case 200 :
-                
-    //             enqueueSnackbar('Sheet successfully imported!!',{variant:'success',action:actions});
-
-    //             togglePointerEvents(true);
-    //             dispatch(Filterer(filter,"product",params));
-    //             setUpload({
-    //                 open      : true,
-    //                 uploading : false,
-    //                 result    : response.data
-    //             });
-    //             return;
-
-    //         default :
-    //             enqueueSnackbar('Something went wrong. Please try again',{variant:'error',action:actions});
-    //             togglePointerEvents(true);
-
-    //             setUpload({
-    //                 ...upload,
-    //                 uploading : false,
-    //             });
-    //             return;
-    //     }
-    // }
-
-    // const uploadFileModal = () =>{
-    //     if(upload.uploading){
-    //         return (
-    //             <Dialog
-    //                 maxWidth="xs"
-    //                 open={upload.uploading}
-    //                 disableBackdropClick
-    //                 className="uploading-processing"
-    //             >
-    //                 <DialogContent>
-    //                     <div>
-    //                         <div className="loading-submit-upload" style={{textAlign:"center"}}>
-    //                             <CircularProgress />
-    //                         </div>
-    //                         <div className="status-submit-upload">
-    //                             Uploading
-    //                         </div>
-    //                     </div>
-    //                 </DialogContent>
-    //             </Dialog>
-    //         );
-    //     }else{
-    //         return null;
-    //     }
-    // }
-
 
     const skeletonTable = () => {
 
@@ -307,17 +222,12 @@ const Products = (props:any) =>{
             warranty_start     : moment(today).format('MM/DD/YYYY'),
         });
 
-        // console.log(productInput);
-        // setResponseMessage(initErrroMessage);
         resetError();
         setModalAdd(true);
     }
 
     const initModalShow = (productInfo:any) =>{
         setProduct(productInfo);
-
-        // console.log(productInfo);
-
         setModalShow(true);
     }
 
@@ -342,13 +252,11 @@ const Products = (props:any) =>{
     const initModalEdit = () =>{
 
         resetError();
-        // setResponseMessage(initErrroMessage);    // reset error message state before mounting modal;
 
         setProductInput({
             id                          : product.id,
             supplier                    : product.supplier.id,
             product                     : product.product.id,
-            // product_description         : product.product_description,
             delivery_date               : product.delivery_date,
             reference_delivery_document : product.reference_delivery_document,
             serial_number               : product.serial_number,
@@ -367,13 +275,7 @@ const Products = (props:any) =>{
     const submitForm = async (event:any, action:action) => {
 
         resetError();
-
-        console.log(action);
-
-        
-        // setResponseMessage(initErrroMessage);    // reset error message state before submiting;
-
-        event.persist();  //to access the event properties in an asynchronous way. https://reactjs.org/docs/events.html#event-pooling
+        event.persist(); 
         event.preventDefault();
         togglePointerEvents(false);
         setSubmit(true);
@@ -382,37 +284,18 @@ const Products = (props:any) =>{
             case "edit" :
                 await productsRequest.current.update(productInput).then( 
                     (response:any) =>{
-                        // if(response.network_error){
-                        //     enqueueSnackbar('Network error, please contact administrator!!!',{variant:'error',action:actions});
-                        //     setModalEdit(false);
-                        // }else{
-                            if(response.status === 200){
-                                enqueueSnackbar('Product successfully updated!!!',{variant:'success',action:actions});
-                                setModalEdit(false);
-                                dispatch(productRedux());
-                            }
-                        //     else{
-                        //         enqueueSnackbar('Update failed',{variant:'error',action:actions});
-                        //         updateErrorState(response.data.errors);
-                        //     }
-                        // }
+                        if(response.status === 200){
+                            enqueueSnackbar('Product successfully updated!!!',{variant:'success',action:actions});
+                            setModalEdit(false);
+                            dispatch(productRedux());
+                        }
                     }
                 )
-                // .catch(()=>{
-                //     enqueueSnackbar('Something went wrong. Please try again!!!',{variant:'error',action:actions});
-                //     setModalEdit(false);
-                // });
+
                 break;
             case "add" :
-
                 await productsRequest.current.add(productInput).then( 
                     (response:any) =>{
-                        console.log(response);
-
-                        // if(response.network_error){
-                        //     enqueueSnackbar('Network error, please contact administrator!!!',{variant:'error',action:actions});
-                        //     setModalAdd(false);
-                        // }else{
                         if(response.status === 200){
                             enqueueSnackbar('Product successfully added!!!',{variant:'success',action:actions});
                             setModalAdd(false);
@@ -423,10 +306,6 @@ const Products = (props:any) =>{
                         }
                     }
                 )
-                // .catch((e:any)=>{
-                //     enqueueSnackbar('Something went wrong. Please try again!!!. '+ e ,{variant:'error',action:actions});
-                    // setModalAdd(false);
-                // });
                 break;
         }
         
@@ -537,7 +416,7 @@ const Products = (props:any) =>{
                                 // console.log(filterSwitch)
                                 dispatch(ProductsFilter(!products.filter));
                                 setFilter(initFilter);
-                                setParams(initParams);
+                                // dispatch(ProductsParams({per_page:10,page:1}));
                             }} >
                             <FilterList />
                         </Fab>
@@ -571,7 +450,7 @@ const Products = (props:any) =>{
                     </TableHead>
                     
                     <TableBody>
-                        <Filter filter={filter} setFilter={setFilter} params={params} setParams={setParams}/>
+                        <Filter filter={filter} setFilter={setFilter} />
                         {
                             products.data ?
                                 products.data.data.data.map((key:any,id:number)=>(
@@ -624,24 +503,18 @@ const Products = (props:any) =>{
                         : ''
                     }
                     
-                    <table>
-                        <tbody>
-                            <tr>
-                                <TablePagination
-                                    rowsPerPageOptions={[10,25,50,100]}
-                                    colSpan={0}
-                                    count={products.data ? products.data.data.meta.total : 10}
-                                    rowsPerPage={params.per_page}
-                                    page={products.data ? params.page-1: 0}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={(handleChangeRowsPerPage)}
-                                    ActionsComponent={TablePaginationActions}
-                                    className=""
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
-                    
+                    <TablePagination
+                        rowsPerPageOptions={[10,25,50,100]}
+                        colSpan={0}
+                        component="div"
+                        count={products.data ? products.data.data.meta.total : 10}
+                        rowsPerPage={products.params.per_page}
+                        page={products.data ? products.params.page-1: 0}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={(handleChangeRowsPerPage)}
+                        ActionsComponent={TablePaginationActions}
+                        className="custom-pagination"
+                    />
                 </div>
             </Paper>
         </React.Fragment>

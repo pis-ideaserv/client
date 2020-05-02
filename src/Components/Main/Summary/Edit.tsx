@@ -14,9 +14,6 @@ import AsyncCreatableSelect from 'react-select/async-creatable'
 interface Add {
     open : boolean,
     handleClose : any,
-
-    per_page : number,
-    page : number,
     input : any,
     setInput : any,
 }
@@ -96,7 +93,7 @@ const Edit = (props:Add) => {
     });
     const [ categoryHandle, setCategoryHandler ] = React.useState(false);
     const [categoryValue,setCategoryValue] = React.useState('');
-    const [categoryPreValue,setCategoryPreValue] = React.useState();
+    const [categoryPreValue,setCategoryPreValue] = React.useState(null);
 
 
     const categoryParams = {

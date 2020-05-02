@@ -1,5 +1,5 @@
 import React from 'react';
-import {request,Format} from './StaticMethods';
+import {request} from './StaticMethods';
 import Token from "../Token";
 import Url from '../ServerUrl';
 import {useDispatch} from 'react-redux';
@@ -29,7 +29,7 @@ interface showSupplier{
 const Suppliers = (props:any):any =>{
     const dispatch = useDispatch();
 
-    const processData = (data:Format) =>{
+    const processData = (data:any) =>{
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -42,7 +42,7 @@ const Suppliers = (props:any):any =>{
 
         show : async(user?:showSupplier) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -61,7 +61,7 @@ const Suppliers = (props:any):any =>{
 
         get     : async(id:number)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -80,7 +80,7 @@ const Suppliers = (props:any):any =>{
 
         update : async (supplier:Supplier) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -99,7 +99,7 @@ const Suppliers = (props:any):any =>{
 
         add : async (supplier:Supplier) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -118,7 +118,7 @@ const Suppliers = (props:any):any =>{
 
         search : async(search:string) =>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -131,13 +131,14 @@ const Suppliers = (props:any):any =>{
                 url     : Url.suppliers+'?search='+search,
                 method  : 'GET',
             })
+            return processData(format);
         },
 
 
         filter : async (filter:any) => {
             const token = Token.get();
             let params = new URLSearchParams(filter).toString();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -150,6 +151,7 @@ const Suppliers = (props:any):any =>{
                 url     : Url.suppliers+'?filter=true&'+params,
                 method  : 'GET',
             })
+            return processData(format);
         }
 
 

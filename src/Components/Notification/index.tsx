@@ -1,9 +1,6 @@
 import React from 'react';
 import { Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableHead, TableRow, TableBody, TableCell, TablePagination } from '@material-ui/core';
 import './notification.style.scss';
-import axios from 'axios';
-import Url from 'Services/ServerUrl';
-import { Token, Requests } from 'Services';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Chip from '@material-ui/core/Chip';
 import moment from 'moment';
@@ -12,67 +9,32 @@ import { Close } from '@material-ui/icons';
 import Product from 'Components/Main/Products/Upload';
 import Supplier from 'Components/Main/Suppliers/Upload';
 import MasterFile from 'Components/Main/Summary/Upload';
-
+import {useSelector, useDispatch} from 'react-redux';
+import {NotificationsParams,Notifications} from 'Redux/Actions';
 
 
 const Notification = () => {
 
-    const notify:any = React.useRef();
     const [open,setOpen] = React.useState(false);
-    const [data,setData] = React.useState();
-    const [page,setPage] = React.useState(1);
     const {enqueueSnackbar,closeSnackbar} = useSnackbar();
     const [product,setProduct] = React.useState({open : false,result : {}});
     const [masterfile,setMasterFile] = React.useState({open : false,result : {}});
     const [supplier,setSupplier] = React.useState({open : false,result : {}});
+    const notification = useSelector((state:any)=>state.Notifications);
 
-
-    React.useEffect(()=>{
-        if(open){
-            request();
-        }
-    },[open,page]);
-
-    const request = async() => {
-        // let a =await axios({
-        //     method  :   "get",
-        //     url     :   Url.notification,
-        //     data    : {page},
-        //     headers  : {
-        //         'Content-Type'  :   'application/json',
-        //         'Accept'        :   'application/json',
-        //         'Authorization' :   'Bearer '+Token.get(),
-        //     }
-        // });
-
-        let a = await notify.current.show({page});
-
-        if(a.status === 200){
-            setData(a.data);
-        }
-    }
+    const dispatch = useDispatch();
 
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number) => {
-        let param = page;
-        param = newPage+1;
-        // setParams(param);
-        setPage(param);
-        // request();
+        let pams:any = notification.params;
+        pams.page=newPage+1;
+        dispatch(NotificationsParams(pams));
+        dispatch(Notifications(pams));
     }
 
     const skeletonTable = () => {
-
         let a:any = [];
         const tableCell:any = <TableCell align="right"><Skeleton variant="rect" /></TableCell>;
-        
-        
-        // Object.keys(data.table).forEach((value:any)=>{
-        //     if(products.table[value].show){
-        //         counter=counter+1;
-        //         tableCell.push(<TableCell key={counter} align="right"><Skeleton variant="rect" width={118} height={20} /></TableCell>)
-        //     }
-        // })
         
         for(let i = 0;i < 10;i++ ){
             a.push(
@@ -138,7 +100,7 @@ const Notification = () => {
 
     return(
         <React.Fragment>
-            <Requests.Notification request={notify} />
+
             <Product upload={product} setUpload={setProduct} />
             <MasterFile upload={masterfile} setUpload={setMasterFile} />
             <Supplier upload={supplier} setUpload={setSupplier} />
@@ -169,8 +131,8 @@ const Notification = () => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    data ?
-                                        data.data.map((value:any,key:number) =>(
+                                    notification.data ?
+                                        notification.data.data.data.map((value:any,key:number) =>(
                                             <TableRow hover key={key} className="pointer" onDoubleClick={()=>setErrorMessage(value)}>
                                                 <TableCell>{value.id}</TableCell>
                                                 <TableCell>{value.type}</TableCell>
@@ -200,9 +162,9 @@ const Notification = () => {
                         <TablePagination
                             rowsPerPageOptions={[]}
                             component="div"
-                            count={data ? data.meta.total : 10}
+                            count={notification.data ? notification.data.data.meta.total : 10}
                             rowsPerPage={10}
-                            page={data ? page-1 : 0}
+                            page={notification.data ? notification.params.page-1 : 0}
                             backIconButtonProps={{
                                 'aria-label': 'previous page',
                             }}

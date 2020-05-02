@@ -1,5 +1,5 @@
 import React from 'react';
-import {request,Format} from './StaticMethods';
+import {request} from './StaticMethods';
 import Token from "../Token";
 import Url from '../ServerUrl';
 import {useDispatch} from 'react-redux';
@@ -28,7 +28,7 @@ interface Users{
 const User = (props:any):any => {
     const dispatch = useDispatch();
 
-    const processData = (data:Format) => {
+    const processData = (data:any) => {
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -41,7 +41,7 @@ const User = (props:any):any => {
 
         show : async(user?:Show) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -61,7 +61,7 @@ const User = (props:any):any => {
         get : async(id:number) => {
             const token = Token.get();
 
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -80,7 +80,7 @@ const User = (props:any):any => {
 
         update : async (user:Users) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -99,7 +99,7 @@ const User = (props:any):any => {
 
         add : async (user:Users) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -118,7 +118,7 @@ const User = (props:any):any => {
 
         search : async(search:string) =>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -131,12 +131,13 @@ const User = (props:any):any => {
                 url     : Url.user+'?search='+search,
                 method  : 'GET',
             })
+            return processData(format);
         },
 
         filter : async (filter:any) => {
             const token = Token.get();
             let params = new URLSearchParams(filter).toString();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -149,6 +150,7 @@ const User = (props:any):any => {
                 url     : Url.user+'?filter=true&'+params,
                 method  : 'GET',
             })
+            return processData(format);
         }
 
     }));

@@ -17,3 +17,12 @@ export const error = (a:boolean) => {
         });
     }
 }
+
+export const caller = (a:boolean) => {
+    return (dispatch:any) => {
+        dispatch({
+            type    : stat.caller,
+            payload : a
+        });
+    }
+}

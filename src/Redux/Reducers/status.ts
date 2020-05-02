@@ -1,8 +1,9 @@
-import { status as stat } from '../Actions/Types';
+import { status as stat} from '../Actions/Types';
 
 const initialState = {
 	loggedIn    : false,
-	error       : false, 
+	error       : false,
+	caller		: false, 
 };
 
 const status = (state = initialState, action:any) =>{
@@ -16,7 +17,12 @@ const status = (state = initialState, action:any) =>{
             return {
                 ...state,
                 error : action.payload
-            }
+			}
+		case stat.caller:
+			return {
+				...state,
+				caller : action.payload
+			}
     	default:
       		return state;
  	}

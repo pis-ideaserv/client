@@ -27,7 +27,7 @@ const Category = (props:any):any => {
     React.useImperativeHandle(props.request,()=>({
         show : async(user:show) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -46,7 +46,7 @@ const Category = (props:any):any => {
 
         get : async(user:number) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -64,7 +64,7 @@ const Category = (props:any):any => {
 
         add : async(pml:add) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',

@@ -11,7 +11,7 @@ export interface Format{
 
 interface request{
     url     :   string,
-    header  ?:   any,
+    headers  ?:   any,
     params  ?:   any,
     method  :   'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 }
@@ -25,8 +25,8 @@ export const request = async(data:request) =>{
         data          : '',
     }
 
-    if(config.header === undefined){
-        config['header'] = {
+    if(config.headers === undefined){
+        config['headers'] = {
             'Content-Type'  :   'application/json',
             'Accept'        :   'application/json',
             'Authorization' :   'Bearer '+Token.get(),
@@ -129,14 +129,14 @@ const handleError = async (error:any,request:request) =>{
                 format.status =error.response.status;
                 return format;
             }
-
+            
             let a:any = await refresh();
 
             if(a.success){
                 let tok = a.response.data.token
                 Token.save(tok);
                 
-                request.header = {
+                request.headers = {
                     'Content-Type'  :   'application/json',
                     'Accept'        :   'application/json',
                     'Authorization' :   'Bearer '+tok,
@@ -152,6 +152,7 @@ const handleError = async (error:any,request:request) =>{
                     return format;
                 }
             }else{
+                format.status = a.response.response.status;
                 format.network_error = false;
                 return format;
             }

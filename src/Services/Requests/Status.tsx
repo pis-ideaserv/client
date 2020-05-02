@@ -10,7 +10,7 @@ import withRouterInnerRef from '../WithRouterInnerRef';
 const Status = (props:any):any => {
     const dispatch = useDispatch();
 
-    const processData = (data:Format) =>{
+    const processData = (data:any) =>{
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -23,7 +23,7 @@ const Status = (props:any):any => {
 
         show : async() => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',

@@ -1,14 +1,10 @@
-import { TableRow, TableCell, Popper, Paper, Typography, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
+import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
 import React, { useState } from "react";
-import { DatePicker } from "material-ui-pickers";
-import moment from "moment";
-import {Filter as Filterer} from "Redux/Actions";
+import {Filter as Filterer,SuppliersParams} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 
 const Filter = (props:any) => {
-
-
 
     const dispatch = useDispatch();
 
@@ -88,7 +84,8 @@ const Filter = (props:any) => {
         // reset();
 
         let params = {per_page:10,page:1};
-        props.setParams(params);
+        // props.setParams(params);
+        dispatch(SuppliersParams(params));
 
         if(action === "filter"){
             reset();

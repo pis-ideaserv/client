@@ -15,10 +15,25 @@
     }
 }
 
-@media(max-width: 360px) {
-    .user-icon-login{
-        left :110px !important;    
+// @media(max-width: 360px) {
+//     .user-icon-login{
+//         left :120px !important;    
+//     }
+// }
+
+@media(max-width: 414px) {
+    .logo-title{
+        font-size:25px !important;
     }
+
+    .logo-login img{
+        width:125px !important;
+    }
+}
+
+
+.login{
+    margin-top : 35px;
 }
 
 
@@ -33,7 +48,7 @@
     }
 
     & .logo-title{
-        color: #00127f;
+        color: #3f51b5;
         font-family: 'Open Sans', sans-serif;
         text-transform: uppercase;
         margin-top: -5px;

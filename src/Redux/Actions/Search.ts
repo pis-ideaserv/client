@@ -1,11 +1,5 @@
-import { Search as sr, Users, Products, Suppliers } from './Types';
-import {Requests} from 'Services';
+import { Search as sr } from './Types';
 
-interface params{
-    target      ?:  string,
-    open        ?:  boolean,
-    value       ?:  string
-}
 
 const open = (params :boolean) => {
         
@@ -43,7 +37,7 @@ interface param {
     target  : targets,
 }
 
-const data = (params:param) =>{
+const data = () =>{
 
     // switch (params.target){
     //     case "users" :

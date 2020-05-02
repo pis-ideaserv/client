@@ -9,9 +9,9 @@ import MasterCodes from './MasterCodes';
 import Category from './Category';
 import status from './status';
 import { Token } from 'Services';
-import Activities from './Activities';
 import {status as stat} from '../Actions/Types';
 import Notifications from './Notifications';
+import Logs from './Logs';
 
 
 const appReducer =  combineReducers({
@@ -24,8 +24,8 @@ const appReducer =  combineReducers({
     MasterCodes,
     Category,
     status,
-    Activities,
-    Notifications
+    Notifications,
+    Logs,
 });
 
 const rootReducer = (state:any,action:any) => {

@@ -1,7 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { NavigationTitle,Suppliers as supplierAction,SuppliersFilter, Filter as Filterer } from 'Redux/Actions';
+import { 
+    NavigationTitle,
+    Suppliers as supplierAction,
+    SuppliersFilter,
+    SuppliersParams, 
+    Filter as Filterer 
+} from 'Redux/Actions';
 import { useSnackbar } from 'notistack';
 import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, DialogContent, CircularProgress, Fab } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
@@ -48,14 +54,14 @@ const Suppliers = (props:any) => {
         contact_number: '',
         email         : '',
     };
-    const [params, setParams] = React.useState({page:1,per_page:10});
+    // const [params, setParams] = React.useState({page:1,per_page:10});
 
     //states
     const [modalShow, setModalShow] = React.useState(false);
     const [modalEdit, setModalEdit] = React.useState(false);
     const [modalAdd, setModalAdd]   = React.useState(false);
     const [submit,setSubmit]        = React.useState(false);
-    const [supplier, setSupplier]   = React.useState();
+    const [supplier, setSupplier]   = React.useState(null);
     const [ upload,setUpload ] = React.useState(false);
 
     const [supplierInput, setSupplierInput] = React.useState(initSupplier);
@@ -75,9 +81,6 @@ const Suppliers = (props:any) => {
 
     React.useEffect(()=>{
         dispatch(NavigationTitle({title : 'Suppliers', control:'suppliers' }));
-        // dispatch(Filterer(filter,"supplier",params));
-        dispatch(supplierAction());
-
         window.addEventListener('scroll', scroll, true);
         return () =>{
             window.removeEventListener('scroll', scroll);
@@ -240,10 +243,9 @@ const Suppliers = (props:any) => {
     
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number) =>{
 
-        let param = params;
+        let param = supplierState.params;
         param.page = newPage+1;
-        setParams(param);
-
+        dispatch(SuppliersParams(param));
         dispatch(Filterer(filter,"supplier",param));
     }
 
@@ -252,7 +254,8 @@ const Suppliers = (props:any) => {
         
         let paran = {page:1,per_page:val};
 
-        setParams(paran);
+        // setParams(paran);
+        dispatch(SuppliersParams(paran));
         dispatch(Filterer(filter,"supplier",paran));
     };
 
@@ -441,7 +444,7 @@ const Suppliers = (props:any) => {
                         </TableHead>
                         
                         <TableBody>
-                            <Filter filter={filter} setFilter={setFilter} params={params} setParams={setParams}/>
+                            <Filter filter={filter} setFilter={setFilter} />
                             {
                                 supplierState.data ?
                                     supplierState.data.data.data.map((key:any,id:number)=>(
@@ -482,22 +485,18 @@ const Suppliers = (props:any) => {
                         : null
                     }
                     
-                    <table>
-                        <tbody>
-                            <tr>
-                                <TablePagination
-                                    rowsPerPageOptions={[10,25,50,100]}
-                                    colSpan={0}
-                                    count={supplierState.data ? supplierState.data.data.meta.total : 10}
-                                    rowsPerPage={params.per_page}
-                                    page={supplierState.data ? params.page-1 : 0}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
+                    <TablePagination
+                        rowsPerPageOptions={[10,25,50,100]}
+                        component="div"
+                        colSpan={0}
+                        count={supplierState.data ? supplierState.data.data.meta.total : 10}
+                        rowsPerPage={supplierState.params.per_page}
+                        page={supplierState.data ? supplierState.params.page-1 : 0}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                        className="custom-pagination"
+                    />
                 </div>
             </Paper>
         </React.Fragment>

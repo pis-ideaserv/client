@@ -2,7 +2,7 @@ import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Sel
 import React, { useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
 import moment from "moment";
-import {Filter as Filterer} from "Redux/Actions";
+import {Filter as Filterer,ProductsParams} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 const Filter = (props:any):any => {
@@ -133,7 +133,8 @@ const Filter = (props:any):any => {
         // })
 
         let params = {per_page:10,page:1};
-        props.setParams(params);
+        // props.setParams(params);
+        dispatch(ProductsParams(params));
         
 
         if(action === "filter"){
@@ -172,7 +173,7 @@ const Filter = (props:any):any => {
                 
                 let a:any = props.filter;
                 a[e.target.name].key = '';    
-                dispatch(Filterer(a,"product",props.params));
+                dispatch(Filterer(a,"product",products.params));
             }
         }
 
@@ -180,7 +181,7 @@ const Filter = (props:any):any => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"product",props.params));
+                dispatch(Filterer(props.filter,"product",products.params));
             }
         }
     }

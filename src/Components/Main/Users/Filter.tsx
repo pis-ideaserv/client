@@ -1,8 +1,6 @@
-import { TableRow, TableCell, Popper, Paper, Typography, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
+import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
 import React, { useState } from "react";
-import { DatePicker } from "material-ui-pickers";
-import moment from "moment";
-import {Filter as Filterer} from "Redux/Actions";
+import {Filter as Filterer, UsersParams} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 
@@ -86,13 +84,8 @@ const Filter = (props:any) => {
     }
 
     const submitFilter = async (action:submit,control:control) =>{
-        // reset();
-
         let params = {per_page:10,page:1};
-
-        props.setParams(params);
-
-
+        dispatch(UsersParams(params));
         if(action === "filter"){
             reset();
             if(props.filter[control].key !== ''){
@@ -130,7 +123,7 @@ const Filter = (props:any) => {
                 
                 let a:any = props.filter;
                 a[e.target.name].key = '';    
-                dispatch(Filterer(a,"user",props.params));
+                dispatch(Filterer(a,"user",user.params));
             }
         }
 
@@ -138,7 +131,7 @@ const Filter = (props:any) => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"user",props.params));
+                dispatch(Filterer(props.filter,"user",user.params));
             }
         }
     }
