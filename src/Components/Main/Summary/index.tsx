@@ -186,7 +186,7 @@ const Summary = (props:any) => {
     const skeletonTable = () => {
         let a:any = [];
 
-        const tableCell = <TableCell align="center"><Skeleton variant="rect" /></TableCell>;
+        const tableCell = <TableCell align="center"><Skeleton variant="rect" width={'100%'} height={20} /></TableCell>;
         for(let i = 0;i < 10;i++ ){
             a.push(
                 <TableRow key={i}>
@@ -212,7 +212,7 @@ const Summary = (props:any) => {
             />
             
             
-            <Paper className="paper-table">
+            <Paper className="paper-table main-content">
                 <div className="header">
                     <div className="title">Product Maintenance</div>
                 </div>

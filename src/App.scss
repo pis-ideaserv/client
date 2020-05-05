@@ -84,13 +84,19 @@
                     & .input{
                         width: 100%;
                         margin: 0 !important;
-                        & .MuiInputBase-root input{
-                            padding:10px !important;
+                        & .MuiInputBase-root {
+                            & input{
+                                padding:10px !important;
+                            }
+                            & .MuiSelect-root{
+                                padding:10px !important;
+                            }
                         }
                     }
                 }
                 & tr{
                     & td {
+                        min-width: 200px;
                         max-width: 200px;
                         overflow: hidden;
                         text-overflow: ellipsis;
@@ -326,23 +332,13 @@ td.selected-column{
 
 .container{
     width: auto;
+    max-width : 100%;
 }
-
-// @media (min-width: 576px) {
-
-// }
-
-// @media (min-width: 768px) {
-
-// }
-// @media (min-width: 992px) {
-
-// }
-
-// @media (min-width: 1200px) {
-
-// }
-
-// .container{
-//     max-width : 100%;
-// }
+.main-content{
+    margin-left : 60px;
+}
+@media only screen and (max-width: 600px) {
+    .main-content{
+        margin-left: 0;
+    }
+}

@@ -31,7 +31,7 @@ const Sync = () => {
             spacing={0}
             alignItems="center"
             justify="center"
-            style={{ minHeight: "calc(100vh - 120px)" }}
+            style={{ minHeight: "100vh" }}
         >
             <Grid className="text-center" item xs={6}>
                 <CircularProgress size={60} /> <br />

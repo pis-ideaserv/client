@@ -140,7 +140,7 @@ const Users = (props:any) =>{
     const skeletonTable = () => {
         let a:any = [];
 
-        const tableCell = <TableCell align="right"><Skeleton variant="rect" width={118} height={20} /></TableCell>;
+        const tableCell = <TableCell align="right"><Skeleton variant="rect" width={'100%'} height={20} /></TableCell>;
         for(let i = 0;i < 10;i++ ){
             a.push(
                 <TableRow key={i}>
@@ -224,13 +224,11 @@ const Users = (props:any) =>{
                             enqueueSnackbar('Network error, please contact administrator!!!',{variant:'error',action:actions});
                             setModalEdit(false);
                         }else{
-                            if(response.status === 200){
+                            if(response.status === 200 && !response.data.hasOwnProperty('status') ){
                                 enqueueSnackbar('Supplier successfully updated!!!',{variant:'success',action:actions});
                                 setModalEdit(false);
                                 dispatch(user());
-                            }
-                            else{
-                                
+                            }else{
                                 enqueueSnackbar('Update failed',{variant:'error',action:actions});
                                 updateErrorState(response.data.errors);
                             }
@@ -252,13 +250,11 @@ const Users = (props:any) =>{
                             enqueueSnackbar('Network error, please contact administrator!!!',{variant:'error',action:actions});
                             setModalAdd(false);
                         }else{
-                            if(response.status === 200){
+                            if(response.status === 200 && !response.data.hasOwnProperty('status')){
                                 enqueueSnackbar('Supplier successfully updated!!!',{variant:'success',action:actions});
                                 setModalAdd(false);
                                 dispatch(user());
-                            }
-                            else{
-                                
+                            }else{
                                 enqueueSnackbar('Update failed',{variant:'error',action:actions});
                                 updateErrorState(response.data.errors);
                             }
@@ -307,7 +303,7 @@ const Users = (props:any) =>{
                 submitForm = {submitForm}
                 setModalAdd = {setModalAdd}
             />
-            <Paper className="paper-table">
+            <Paper className="paper-table main-content">
                 <div className="header">
                     <div className="title">Users</div>
                     <div className="controls">

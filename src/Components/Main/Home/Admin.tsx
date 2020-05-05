@@ -248,7 +248,7 @@ const Admin = ( props :any ) => {
             <Requests.Status request ={statusRequest} />
 
             {dataModal()}
-            <div className="justify-content-center row" style={{marginTop:'120px'}}>
+            <div className="justify-content-center row" style={{marginTop:'90px'}}>
                 <div className="col-lg text-center iconButton">
                     <Paper className="wrapper-box">
                         <Paper className="icon-wrapper-box">
@@ -365,7 +365,7 @@ const Admin = ( props :any ) => {
                         </TableBody>
                     </Table>
                 </div>
-                <Button onClick={()=>props.history.push('/activities')} size="small" variant="contained" color="primary" className="footer-button">
+                <Button onClick={()=>props.history.push('/reports')} size="small" variant="contained" color="primary" className="footer-button">
                     More info <ArrowForward />
                 </Button>
             </Paper>

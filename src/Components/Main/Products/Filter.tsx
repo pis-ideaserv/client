@@ -1,4 +1,4 @@
-import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
+import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem, InputLabel } from "@material-ui/core"
 import React, { useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
 import moment from "moment";
@@ -496,10 +496,11 @@ const Filter = (props:any):any => {
                                 }
                             }
                         )}
-                        value = {props.filter.warranty_start.key == '' ? null : moment(props.filter.warranty_start.key).format()}
+                        value = {props.filter.warranty_start.key === '' ? null : moment(props.filter.warranty_start.key).format()}
                         onFocus = {(event)=>controller(event,"warranty_start","open")}
                         // cancelLabel = {<Button>Cancel</Button>}
                         // okLabel = {<Button>OK</Button>}
+                        inputVariant="outlined"
                     />
 
 
@@ -546,9 +547,10 @@ const Filter = (props:any):any => {
                                     }
                                 })
                             }}
-                        value = {props.filter.warranty_end.key == '' ? null : moment(props.filter.warranty_end.key).format()}
+                        value = {props.filter.warranty_end.key === '' ? null : moment(props.filter.warranty_end.key).format()}
                         onFocus = {(event)=>controller(event,"warranty_end","open")}
                         // onKeyDown = {onKey}
+                        inputVariant="outlined"
                     />
                     <Popper className="text-center" id={Boolean(popper.warranty_end)? "simple-popper" : undefined} open={Boolean(popper.warranty_end)} anchorEl={popper.warranty_end}>
                         <Paper className="popper-paper">
@@ -577,21 +579,24 @@ const Filter = (props:any):any => {
                 </TableCell>
                 
                 <TableCell align="center" className="filter" hidden={!products.table.status.show}>
-                    <FormControl variant="outlined" style={{width:'100%'}}>
-                        <Select
+                    {/* <FormControl variant="outlined" style={{width:'100%'}}> */}
+                        <TextField
                             value={props.filter.status.key}
                             onChange={setText}
-                            name="status"
+                            // name="status"
                             onFocus = {(event)=>controller(event,"status","open")}
+                            variant="outlined"
+                            select
+                            className="input"
                         >
                             <MenuItem value={0}>All</MenuItem>
                             <MenuItem value={1}>New</MenuItem>
                             <MenuItem value={2}>Replaced</MenuItem>
                             <MenuItem value={3}>Returned</MenuItem>
                             <MenuItem value={4}>Repaired</MenuItem>                        
-                        </Select>
+                        </TextField>
                     
-                    </FormControl>
+                    {/* </FormControl> */}
                     <Popper className="text-center" id={Boolean(popper.status)? "simple-popper" : undefined} open={Boolean(popper.status)} anchorEl={popper.status}>
                         <Paper className="popper-paper">
                             <Button variant="contained" color="primary" onClick={()=>setPopper({...popper,status:null})}>
@@ -611,6 +616,7 @@ const Filter = (props:any):any => {
                         animateYearScrolling
                         variant = "dialog"
                         className="input"
+                        inputVariant="outlined"
                         onChange = {(event) => props.setFilter({
                                 ...props.filter,
                                 delivery_date: {
@@ -619,7 +625,7 @@ const Filter = (props:any):any => {
                                 }
                             }
                         )}
-                        value = {props.filter.delivery_date.key == '' ? null : moment(props.filter.delivery_date.key).format()}
+                        value = {props.filter.delivery_date.key === '' ? null : moment(props.filter.delivery_date.key).format()}
                         onFocus = {(event)=>controller(event,"delivery_date","open")}
                     />
 

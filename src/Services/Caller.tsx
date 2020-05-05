@@ -54,7 +54,6 @@ const Caller = ():any => {
         }else{
             clearInterval(ids);
             setIds(null);
-            console.log(ids);
         }
     }
 

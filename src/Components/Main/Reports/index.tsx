@@ -67,7 +67,7 @@ const Reports = ( ) => {
     const skeletonTable = () => {
         let a:any = [];
 
-        const tableCell = <TableCell align="right"><Skeleton variant="rect" /></TableCell>;
+        const tableCell = <TableCell align="right"><Skeleton variant="rect" width={'100%'} height={20}  /></TableCell>;
         for(let i = 0;i < 10;i++ ){
             a.push(
                 <TableRow key={i}>
@@ -285,7 +285,7 @@ const Reports = ( ) => {
     return(
         <div>
             {dataModal()}
-            <Paper style={{whiteSpace:'nowrap'}} className="paper-table">
+            <Paper style={{whiteSpace:'nowrap'}} className="paper-table main-content">
                 <div className="header">
                     <div className="title">User Activities</div>
                 </div>

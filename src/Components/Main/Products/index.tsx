@@ -187,7 +187,7 @@ const Products = (props:any) =>{
         Object.keys(products.table).forEach((value:any)=>{
             if(products.table[value].show){
                 counter=counter+1;
-                tableCell.push(<TableCell key={counter} align="right"><Skeleton variant="rect" width={118} height={20} /></TableCell>)
+                tableCell.push(<TableCell key={counter} align="right"><Skeleton variant="rect" width={'100%'} height={20} /></TableCell>)
             }
         })
         
@@ -284,19 +284,23 @@ const Products = (props:any) =>{
             case "edit" :
                 await productsRequest.current.update(productInput).then( 
                     (response:any) =>{
-                        if(response.status === 200){
+                        if(response.status === 200 && !response.data.hasOwnProperty('status')){
                             enqueueSnackbar('Product successfully updated!!!',{variant:'success',action:actions});
                             setModalEdit(false);
                             dispatch(productRedux());
                         }
-                    }
+                        if(response.status === 200 && response.data.hasOwnProperty('status')){
+                            enqueueSnackbar('Update product failed!!',{variant:'error',action:actions});
+                            updateErrorState(response.data.errors);
+                        }
+                    }   
                 )
 
                 break;
             case "add" :
                 await productsRequest.current.add(productInput).then( 
                     (response:any) =>{
-                        if(response.status === 200){
+                        if(response.status === 200 && !response.data.hasOwnProperty('status')){
                             enqueueSnackbar('Product successfully added!!!',{variant:'success',action:actions});
                             setModalAdd(false);
                             dispatch(productRedux());
@@ -408,7 +412,7 @@ const Products = (props:any) =>{
             />
             
             {/* {uploadFileModal()} */}
-            <Paper className="paper-table">
+            <Paper className="paper-table main-content">
                 <div className="header">
                     <div className="title">Products</div>
                     <div className="controls">

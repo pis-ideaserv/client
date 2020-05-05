@@ -81,21 +81,20 @@ const Category = (props:Category) => {
         let a = await categoryRequest.current.add({name:category});
 
 
-        console.log(a);
 
         if(a.network_error){
             enqueueSnackbar("Something went wrong. Plese try again later.",{variant:'error',action:actions});
         }else{
-            if(a.status === 200){
+            if(a.status === 200 && !a.data.hasOwnProperty('status') ){
                 // handleOption();
                 handleClose();
                 enqueueSnackbar("Product category successfull added",{variant:"success",action:actions});
             }else{
  
-                if(a.status === 406){
+                if(a.status === 200 && a.data.hasOwnProperty('status')){
                     setSubmit(false);
                     setError(true);
-                    setMessage('Category name already exists');
+                    setMessage(a.data.message);
                     return;
                 }else{
                     enqueueSnackbar("Something went wrong. Please try again.",{variant:"error",action:actions});

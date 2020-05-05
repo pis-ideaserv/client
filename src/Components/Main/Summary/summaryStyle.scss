@@ -1,0 +1,39 @@
+.summary-select-wrapper{
+    position : relative;
+
+    & label{
+        background : white;
+        position : absolute;
+        color : #757575;
+        margin-top : -8px;
+        left : 14px;
+        z-index : 1;
+        font-size : 13px; 
+    }
+
+    & .summary-select-main{
+        & .summary-select__control .summary-select__value-container div div input{
+            padding: 13px 14px 14px 4px !important;
+        }
+
+        & .summary-select__menu{
+            // max-height: 170px !important;
+        }
+    }
+    
+    &.has-error{
+        & label{
+            color:#f44336,
+
+        }
+        & .summary-select-main{
+            & .summary-select__control{
+                border-color: #f44336;
+            }
+
+            & .summary-select__placeholder{
+                color : #f44336;
+            }
+        }
+    }
+}

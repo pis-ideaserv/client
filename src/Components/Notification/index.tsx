@@ -34,7 +34,7 @@ const Notification = () => {
 
     const skeletonTable = () => {
         let a:any = [];
-        const tableCell:any = <TableCell align="right"><Skeleton variant="rect" /></TableCell>;
+        const tableCell:any = <TableCell align="right"><Skeleton variant="rect" width={'100%'} height={20}  /></TableCell>;
         
         for(let i = 0;i < 10;i++ ){
             a.push(
