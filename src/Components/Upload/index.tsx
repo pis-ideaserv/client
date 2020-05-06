@@ -5,6 +5,7 @@ import { Close } from '@material-ui/icons';
 import {useSnackbar} from "notistack";
 import tus from 'tus-js-client';
 import { Requests } from 'Services';
+import Url from 'Services/ServerUrl';
 
 interface Upload{
 
@@ -82,7 +83,7 @@ const Upload = (props:Upload) => {
 
     const uploadToServer = (file:any) => {
         var upload:any = new tus.Upload(file, {
-            endpoint: "/api/file/",
+            endpoint: Url.file,
             retryDelays: [0, 3000, 5000, 10000, 20000],
             resume : false,
             chunkSize : 1000000,
