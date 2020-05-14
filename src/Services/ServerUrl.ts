@@ -1,4 +1,4 @@
-const server_url = 'http://localhost:8000/api/';
+const server_url = 'http://localhost:8090/api/';
 
 const prefix={
     auth        : 'auth/',
@@ -26,6 +26,7 @@ const Url = {
     status              :   server_url+prefix.status,
     notification        :   server_url+prefix.notification,
     file                :   server_url+'file',
+    filelog            :   server_url+'file-log'
 }
 
 export default Url;

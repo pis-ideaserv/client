@@ -13,7 +13,7 @@ import {
 import { withRouter } from 'react-router-dom';
 import Skeleton from '@material-ui/lab/Skeleton';
 import './ProductsStyle.scss';
-import { Close, CloudUpload, FilterList, ViewColumn } from '@material-ui/icons';
+import { Close, CloudUpload, FilterList, ViewColumn, Cached } from '@material-ui/icons';
 import moment from 'moment';
 import { Requests } from '../../../Services';
 import { useSnackbar } from 'notistack';
@@ -99,9 +99,6 @@ const Products = (props:any) =>{
 
 
     const products =  useSelector( (state:any) => state.Products);
-
-
-
 
     useEffect(()=>{
     
@@ -416,11 +413,12 @@ const Products = (props:any) =>{
                 <div className="header">
                     <div className="title">Products</div>
                     <div className="controls">
+                        <Fab size="small" disabled={products.status!=="done"} className={products.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(productRedux())} color="primary" >
+                            <Cached />
+                        </Fab>
                         <Fab size="small" color="primary" onClick={()=>{
-                                // console.log(filterSwitch)
                                 dispatch(ProductsFilter(!products.filter));
                                 setFilter(initFilter);
-                                // dispatch(ProductsParams({per_page:10,page:1}));
                             }} >
                             <FilterList />
                         </Fab>

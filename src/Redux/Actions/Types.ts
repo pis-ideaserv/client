@@ -59,4 +59,5 @@ export const Notifications  = {
 export const Logs = {
     data    : "logsdata",
     params  : "logsparam",
+    status  : "logsstatus",
 }

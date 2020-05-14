@@ -37,3 +37,28 @@ workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/i
   
   blacklist: [/^\/_/,/\/[^/]+\.[^/]+$/],
 });
+
+
+var cacheName="pis";
+
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open(cacheName).then(function(cache) {
+      return cache.addAll(
+        [
+          '/css/bootstrap.css',
+          '/img/ideaserv.png',
+          '/static/css/main.ae9094db.chunks.css',
+          '/static/css/main.ae9094db.chunks.css.map',
+          '/static/js/2.f1175a05.chunk.js',
+          '/static/js/2.f1175a05.chunk.js.map',
+          '/static/js/main.a95504a7.chunk.js',
+          '/static/js/main.a95504a7.chunk.js.map',
+          '/static/js/runtime~main.a8a9905a.js',
+          '/static/js/runtime~main.a8a9905a.js.map',
+          '/index.html'
+        ]
+      );
+    })
+  );
+});

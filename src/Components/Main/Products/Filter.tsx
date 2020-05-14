@@ -192,7 +192,7 @@ const Filter = (props:any):any => {
             <TableRow>
                 <TableCell align="center" className="filter" hidden={!products.table.supplier_code.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -234,7 +234,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.supplier_name.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -276,7 +276,7 @@ const Filter = (props:any):any => {
                 <TableCell align="center" className="filter" hidden={!products.table.product_code.show}>
                     
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -318,7 +318,7 @@ const Filter = (props:any):any => {
                 
                 <TableCell align="center" className="filter" hidden={!products.table.product_name.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -359,7 +359,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.category.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -400,7 +400,7 @@ const Filter = (props:any):any => {
                 
                 <TableCell align="center" className="filter" hidden={!products.table.serial.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -441,7 +441,7 @@ const Filter = (props:any):any => {
                 
                 <TableCell align="center" className="filter" hidden={!products.table.warranty.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -659,7 +659,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.reference_delivery_document.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -700,7 +700,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.created_by.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -741,7 +741,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.remarks.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"

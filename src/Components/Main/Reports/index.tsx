@@ -1,10 +1,10 @@
 import React from 'react';
-import { Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
-import { Requests } from 'Services';
+import { Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Fab } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import moment from 'moment';
-import {NavigationTitle,LogsParams,Filter as Filterer} from "Redux/Actions"
+import {NavigationTitle,LogsParams,Filter as Filterer,Logs} from "Redux/Actions"
 import {useDispatch, useSelector} from "react-redux";
+import { Cached } from '@material-ui/icons';
 
 const Reports = ( ) => {
 
@@ -288,6 +288,11 @@ const Reports = ( ) => {
             <Paper style={{whiteSpace:'nowrap'}} className="paper-table main-content">
                 <div className="header">
                     <div className="title">User Activities</div>
+                    <div className="controls">
+                        <Fab size="small" disabled={logs.status!=="done"} className={logs.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(Logs())} color="primary" >
+                                <Cached />
+                        </Fab>
+                    </div>
                 </div>
                 <div className="custom-table">
                     <Table size="small">

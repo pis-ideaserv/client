@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {NavigationTitle,MasterCodeParams,Filter as Filterer} from 'Redux/Actions';
-import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, CircularProgress, DialogContent } from '@material-ui/core';
+import {NavigationTitle,MasterCodeParams,Filter as Filterer,MasterCodes} from 'Redux/Actions';
+import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, CircularProgress, DialogContent, Fab } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Add from './Add';
 import Edit from './Edit';
 import { useSnackbar } from 'notistack';
 import { Requests } from '../../../Services';
-import { Close, CloudUpload } from '@material-ui/icons';
+import { Close, CloudUpload, Cached } from '@material-ui/icons';
 import Upload from 'Components/Upload';
 
 
@@ -215,6 +215,11 @@ const Summary = (props:any) => {
             <Paper className="paper-table main-content">
                 <div className="header">
                     <div className="title">Product Maintenance</div>
+                    <div className="controls">
+                        <Fab size="small" disabled={masterCode.status!=="done"} className={masterCode.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(MasterCodes())} color="primary" >
+                            <Cached />
+                        </Fab>
+                    </div>
                 </div>
                 <div className="custom-table">
                     <Table size="small">

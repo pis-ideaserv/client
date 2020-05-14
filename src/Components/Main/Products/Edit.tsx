@@ -303,7 +303,7 @@ const Edit = (props:Add) => {
                                         </div>
                                         <div className="col-md-8 input">
                                             <TextField
-                                                type="number"
+                                                type="text"
                                                 margin="normal"
                                                 variant="outlined"
                                                 className="text"

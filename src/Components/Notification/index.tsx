@@ -1,25 +1,20 @@
 import React from 'react';
-import { Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableHead, TableRow, TableBody, TableCell, TablePagination } from '@material-ui/core';
+import { Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button, Table, TableHead, TableRow, TableBody, TableCell, TablePagination, Fab } from '@material-ui/core';
 import './notification.style.scss';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Chip from '@material-ui/core/Chip';
 import moment from 'moment';
-import {useSnackbar} from 'notistack';
-import { Close } from '@material-ui/icons';
-import Product from 'Components/Main/Products/Upload';
-import Supplier from 'Components/Main/Suppliers/Upload';
-import MasterFile from 'Components/Main/Summary/Upload';
+import { Cached } from '@material-ui/icons';
 import {useSelector, useDispatch} from 'react-redux';
 import {NotificationsParams,Notifications} from 'Redux/Actions';
+import Log from './Log';
 
 
 const Notification = () => {
 
     const [open,setOpen] = React.useState(false);
-    const {enqueueSnackbar,closeSnackbar} = useSnackbar();
-    const [product,setProduct] = React.useState({open : false,result : {}});
-    const [masterfile,setMasterFile] = React.useState({open : false,result : {}});
-    const [supplier,setSupplier] = React.useState({open : false,result : {}});
+    const [log,setLog] = React.useState(false);
+    const [data,setData] = React.useState(null);
     const notification = useSelector((state:any)=>state.Notifications);
 
     const dispatch = useDispatch();
@@ -43,6 +38,7 @@ const Notification = () => {
                     {tableCell}
                     {tableCell}
                     {tableCell}
+                    {tableCell}
                 </TableRow>
             );
         }
@@ -51,80 +47,39 @@ const Notification = () => {
     }
 
     const setErrorMessage = (value:any) => {
-        if(value.status === "failed") {
-            enqueueSnackbar(value.result.errors.message,{
-                variant:"error",
-                anchorOrigin:{
-                    vertical:'top', 
-                    horizontal:'right'
-                },
-                action : action
-            });
-
-            return;
-        }
-
-        if(value.status === 'done'){
-            switch(value.type){
-                case "product" :
-                    setProduct({
-                        ...product,
-                        open : true,
-                        result : value.result
-                    })
-                    return;
-                case "masterfile":
-                    setMasterFile({
-                        ...masterfile,
-                        open    :   true,
-                        result  :   value.result
-                    });
-                    return;
-                case "supplier" :
-                    setSupplier({
-                        ...supplier,
-                        open    : true,
-                        result  : value.result
-                    })
-                    return;
-            }
-        }
+        setData(value);
+        setLog(true);
     }
-
-
-    const action = (key:any) => (
-        <Button variant="text" color="inherit" onClick={ () => closeSnackbar(key)}>
-            <Close />
-        </Button>
-    );
 
     return(
         <React.Fragment>
-
-            <Product upload={product} setUpload={setProduct} />
-            <MasterFile upload={masterfile} setUpload={setMasterFile} />
-            <Supplier upload={supplier} setUpload={setSupplier} />
-
+            <Log open={log} setOpen={setLog} data={data} />
             <Paper className="notification" onClick={()=>setOpen(true)}>
                 Upload Status
             </Paper>
             
             <Dialog
                 fullWidth={true}
+                maxWidth="md"
                 open={open}
                 onClose={()=>setOpen(false)}
                 aria-labelledby="max-width-dialog-title"
             >
-                <DialogTitle id="max-width-dialog-title">Upload Status</DialogTitle>
+                <DialogTitle id="max-width-dialog-title">Upload Status
+                    <Fab size="small" style={{position:'absolute',right:'30px'}} disabled={notification.status!=="done"} className={notification.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(Notifications())} color="primary" >
+                        <Cached />
+                    </Fab>
+                </DialogTitle>
                 
                 <DialogContent>
-                    <Paper className="notfication-table">
+                    <Paper className="notification-table">
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
                                     <TableCell>id</TableCell>
                                     <TableCell>Target</TableCell>
                                     <TableCell>Status</TableCell>
+                                    <TableCell>Result</TableCell>
                                     <TableCell>Date</TableCell>
                                 </TableRow>
                                 
@@ -133,7 +88,7 @@ const Notification = () => {
                                 {
                                     notification.data ?
                                         notification.data.data.data.map((value:any,key:number) =>(
-                                            <TableRow hover key={key} className="pointer" onDoubleClick={()=>setErrorMessage(value)}>
+                                            <TableRow hover key={key} className="pointer" onDoubleClick={()=>value.status !== "failed" ? setErrorMessage(value) : null}>
                                                 <TableCell>{value.id}</TableCell>
                                                 <TableCell>{value.type}</TableCell>
                                                 <TableCell>
@@ -150,6 +105,7 @@ const Notification = () => {
                                                         }}
                                                     />
                                                 </TableCell>
+                                                <TableCell>{value.result === null ? "" :  value.result.hasOwnProperty('message') ? value.result.message : value.result.success+'/'+value.result.total+' were sucessfully imported.'}</TableCell>
                                                 <TableCell>{moment(value.created_at).format('lll')}</TableCell>
                                             </TableRow>
                                         ))

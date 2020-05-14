@@ -12,10 +12,12 @@ export const Logs = () => {
             let params = getState().Logs.params;
 
             dispatch({type  : log.data,payload : ''});
+            dispatch({type    : log.status,payload : "pending",});
 
             const token = Token.get();
             if(token === '' || token === null){
                 dispatch({type    : status.loggedIn,payload : false})
+                dispatch({type    : log.status,payload : "done",});
                 return;
             }
 
@@ -23,10 +25,12 @@ export const Logs = () => {
 
             if (a.status === 200) {
                 dispatch({type    : log.data,payload : a,});
+                dispatch({type    : log.status,payload : "done",});
                 return;
             }
 
             dispatch({type    : status.error,payload : true,});
+            dispatch({type    : log.status,payload : "pending",});
             dispatch({type  : log.data,payload : tempSupplier});
             return
         }

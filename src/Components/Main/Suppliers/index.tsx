@@ -12,7 +12,7 @@ import { useSnackbar } from 'notistack';
 import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, DialogContent, CircularProgress, Fab } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Close, CloudUpload, FilterList } from '@material-ui/icons';
+import { Close, CloudUpload, FilterList, Cached } from '@material-ui/icons';
 import { Requests } from 'Services';
 import Filter from './Filter';
 import Add from './Add';
@@ -410,20 +410,14 @@ const Suppliers = (props:any) => {
                 <div className="header">
                     <div className="title">Suppliers</div>
                     <div className="controls">
+                        <Fab size="small" disabled={supplierState.status!=="done"} className={supplierState.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(supplierAction())} color="primary" >
+                            <Cached />
+                        </Fab>
                         <Fab size="small" color="primary" onClick={()=>{
-                                // console.log(filterSwitch)
                                 dispatch(SuppliersFilter(!supplierState.filter));
-                                // setFilter(initFilter);
-                                // setParams(initParams);
                             }} >
                             <FilterList />
                         </Fab>
-                        {/* <Fab size="small" color="primary" onClick={(event:any)=>{
-                            setTableAnchor(event.currentTarget);
-                            setTableOpen(!tableOpen);
-                        }}>
-                            <ViewColumn />
-                        </Fab> */}
                     </div>
                 </div>
                 <div className="custom-table">

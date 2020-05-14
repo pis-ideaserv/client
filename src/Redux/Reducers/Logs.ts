@@ -7,7 +7,8 @@ const initialState = {
 		page : 1,
 		per_page : 10,
 		filter : '',
-	}
+	},
+	status	: "done",
 };
 
 const Logs = (state = initialState, action:any) => {
@@ -22,6 +23,11 @@ const Logs = (state = initialState, action:any) => {
 			return {
 				...state,
 				params : action.payload,
+			}
+		case log.status:
+			return{
+				...state,
+				status : action.payload,
 			}
 		
     	default:

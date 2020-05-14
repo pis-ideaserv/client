@@ -4,11 +4,11 @@ import { request } from 'Services/Requests/StaticMethods';
 import Url from 'Services/ServerUrl';
 
 
-export const Notifications = (params?:any) => {
+export const Notifications = (param?:any) => {
     return async (dispatch:any,getState:any) => {
         
         let tempActivities = getState().Notifications.data;
-        // let params = getState().Notifications.params;
+        let params = param ? param :  getState().Notifications.params;
 
         dispatch({type    : act.data,payload : '',});
         dispatch({type    : act.status,payload : 'pending',});

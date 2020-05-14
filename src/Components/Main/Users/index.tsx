@@ -7,7 +7,7 @@ import { Requests } from 'Services';
 import { Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, TablePagination, Fab} from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
 import Skeleton from '@material-ui/lab/Skeleton';
-import {Close, FilterList } from '@material-ui/icons';
+import {Close, FilterList, Cached } from '@material-ui/icons';
 import Filter from './Filter';
 import Show from './Show';
 import Edit from './Edit';
@@ -307,6 +307,9 @@ const Users = (props:any) =>{
                 <div className="header">
                     <div className="title">Users</div>
                     <div className="controls">
+                        <Fab size="small" disabled={usersState.status!=="done"} className={usersState.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(user())} color="primary" >
+                            <Cached />
+                        </Fab>
                         <Fab size="small" color="primary" onClick={()=>{
                                 dispatch(UsersFilter(!usersState.filter));
                             }} >

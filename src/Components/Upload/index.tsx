@@ -1,14 +1,15 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Paper, IconButton, LinearProgress } from '@material-ui/core';
+import { Dialog, DialogContent, Button, Paper, IconButton, LinearProgress } from '@material-ui/core';
 import './upload.style.scss';
 import { Close } from '@material-ui/icons';
 import {useSnackbar} from "notistack";
 import tus from 'tus-js-client';
 import { Requests } from 'Services';
 import Url from 'Services/ServerUrl';
+import {useDispatch} from 'react-redux';
+import {Notifications}  from 'Redux/Actions';
 
 interface Upload{
-
     open : boolean,
     setOpen(a:boolean) : void,
     type : "masterfile" | "product" | "supplier"
@@ -26,7 +27,7 @@ const Upload = (props:Upload) => {
         uploading   : false,
         percent     : 0,
     });
-
+    const dispatch = useDispatch();
 
     const dragAndDrop = (event:any) => {
         event.preventDefault();
@@ -91,7 +92,7 @@ const Upload = (props:Upload) => {
                 filename: newFileName,
                 filetype: file.type
             },
-            onError: (error) => {
+            onError: () => {
                 enqueueSnackbar('Something went wrong, please try again!!',{
                     variant:"error",
                     anchorOrigin:{
@@ -120,6 +121,7 @@ const Upload = (props:Upload) => {
                     filename    : newFileName,
                     type        : props.type, 
                 });
+                dispatch(Notifications({per_page:10,page:1}));
 
                 enqueueSnackbar('File successfully uploaded!!!',{
                     variant:"success",
@@ -130,7 +132,7 @@ const Upload = (props:Upload) => {
                     action : action
                 });
 
-                console.error("redux here");
+                // console.error("redux here");
                 props.setOpen(false);
                 setStatus({
                     ...status,
