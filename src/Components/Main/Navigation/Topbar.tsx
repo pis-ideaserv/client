@@ -152,10 +152,7 @@ const Topbar = (props:Props) => {
                 if(response.status === 200){
                     enqueueSnackbar('Supplier successfully updated!!!',{variant:'success',action:actions});
                     setModalEdit(false);
-
-                    const jwt:any = jwt_decode(Token.get()); // get id of current user using JWT payload
-                    const users =await userRequest.current.get(jwt.sub);
-                    dispatch(UserAccount(users));
+                    dispatch(UserAccount());
                 }
             }
         );

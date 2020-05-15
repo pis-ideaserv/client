@@ -16,7 +16,7 @@ const SidebarMobile = (props:Props) => {
         >
             <div className="mobile-logo">
                 <img src={props.logo} alt={props.menu_title} />
-                <p>{props.menu_title}</p>
+                {/* <p>{props.menu_title}</p> */}
             </div>
 
             <Divider />

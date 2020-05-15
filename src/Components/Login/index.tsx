@@ -4,23 +4,18 @@ import {AccountCircle} from '@material-ui/icons';
 import './LoginStyle.scss';
 import {Requests,Token} from 'Services';
 import { withRouter } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-import { useDispatch} from 'react-redux';
-import { UserAccount as User,loggedIn } from 'Redux/Actions';
+import {loggedIn} from 'Redux/Actions';
+import {useDispatch} from 'react-redux';
 
 const title = 'Product Inquiry System';
 const logo  = '/img/ideaserv.png'; 
 
 const Login = (props:any) => {
     const request:any = React.useRef();
-    const userRef:any = React.useRef();
-
     const [ submit, setSubmit ] = React.useState(false);
     const [ credentials, setCredentials ] = React.useState({username : '',password : ''});
     const [ error, setError ] = React.useState({status : false,message: ''});
     const dispatch = useDispatch();
-
-    
 
 
     const update_input_text = (event:any) => {
@@ -58,13 +53,8 @@ const Login = (props:any) => {
                     break;
                 case 200 :
                     Token.save(a.data.token);
-                    // const jwt:any = jwt_decode(Token.get()); // get id of current user using JWT payload
-
-                    // const users =await userRef.current.get(jwt.sub);
-                    // checkUser(users);
-                    // console.log(props.location.state);
-
-                    props.history.push(props.location.from);
+                    dispatch(loggedIn(true));
+                    props.history.push(props.location.state === undefined ? '/' : props.location.state);
                     break;
                 default :
                     setCredentials({
@@ -72,11 +62,6 @@ const Login = (props:any) => {
                         password : "",
                     });
                     setSubmit(false);
-                    // console.log(a);
-                    // setError({
-                    //     status : true,
-                    //     message: "Something wrong with the server, please try again later!!!!"
-                    // });
                     break;
             }
         }else{
@@ -85,80 +70,13 @@ const Login = (props:any) => {
                 ...credentials,
                 password : "",
             });
-            // setError({
-            //     status : true,
-            //     message : "Something wrong with the server. <br /> Please contact Administrator!!!!"
-            // });
         }
-
         return;
-    }
-
-
-    const checkUser = async (user:Requests.Format) => {
-
-        if(user.status === 200){
-            if(!user.data.data.activated){
-                setSubmit(false);
-                setCredentials({
-                    ...credentials,
-                    password : "",
-                });
-                setError({
-                    status : true,
-                    message : "The account is not authorized to log in. <br /> Please contact Administator"
-                });
-                Token.remove();
-                return;
-            }
-
-            
-            const id:any = jwt_decode(Token.get());
-            
-            // const users:Requests.Format = await Requests.User.get(id.sub);
-            const users:any = await userRef.current.get(id.sub);
-        
-
-            if(users.status === 200){
-                dispatch(User(users.data.data));
-                dispatch(loggedIn(true));
-            }
-
-
-            const returnUrl = props.location.state;
-
-            
-            
-            if(returnUrl === undefined || returnUrl === null ){
-                props.history.push('/');
-                return;
-            }
-            
-            props.history.push(returnUrl.from);
-
-            return;
-        }
-
-        setSubmit(false);
-        setCredentials({
-            ...credentials,
-            password : "",
-        });
-        setError({
-            status : true,
-            message : "Something went wrong.!!!<br /> Please contact Administator!!!"
-        });
-
-        Token.remove();
-        return;
-
     }
 
     return(
-        <Container maxWidth="lg">
-            
+        <div className="login">
             <Requests.Auth request={request} />
-            <Requests.User request={userRef} />
             
             <div className="logo-login">
                 <img src={logo} alt="logo" />
@@ -221,7 +139,7 @@ const Login = (props:any) => {
                     </form>
                 </CardContent>
             </Card>
-        </Container>
+        </div>
     );
 }
 

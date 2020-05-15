@@ -15,7 +15,7 @@ const Logs = (props:any):any => {
 
     const dispatch = useDispatch();
 
-    const processData = (data:Format) =>{
+    const processData = (data:any) =>{
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -27,7 +27,7 @@ const Logs = (props:any):any => {
     React.useImperativeHandle(props.request,()=>({
         show: async(logs:show) => {
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',

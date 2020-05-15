@@ -18,10 +18,10 @@ export const error = (a:boolean) => {
     }
 }
 
-export const called = (a:boolean) => {
+export const caller = (a:boolean) => {
     return (dispatch:any) => {
         dispatch({
-            type    : stat.called,
+            type    : stat.caller,
             payload : a
         });
     }

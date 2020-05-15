@@ -18,7 +18,7 @@ const Home = (props:any) =>{
 
 
     return(
-        <div>
+        <div className="main-content">
             { user.level === 1 ?
                 <Admin />
             :

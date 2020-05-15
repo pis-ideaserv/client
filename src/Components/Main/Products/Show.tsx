@@ -15,12 +15,6 @@ interface Show{
     setModalShow(a:boolean) : void,
 }
 
-const styles = {
-    root: {
-      backgroundColor: "transparent"
-    }
-  };
-
 const Show = (props:Show) => {
 
     if(props.product){

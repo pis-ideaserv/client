@@ -1,5 +1,5 @@
 import { Suppliers as sp,status } from './Types';
-import { Requests, Token } from '../../Services';
+import { Token } from '../../Services';
 import { request } from 'Services/Requests/StaticMethods';
 import Url from 'Services/ServerUrl';
 
@@ -31,13 +31,10 @@ export const Suppliers = () => {
                 return;
             }
 
-            if(a.network_error){
-                dispatch({type    : status.error,payload : true,});
-                dispatch({type  : sp.status,payload : 'done'});
-                dispatch({type  : sp.data,payload : tempSupplier});
-                return
-            }
-            
+            dispatch({type    : status.error,payload : true,});
+            dispatch({type  : sp.status,payload : 'done'});
+            dispatch({type  : sp.data,payload : tempSupplier});
+            return
         }
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {request,Format} from './StaticMethods';
+import {request} from './StaticMethods';
 import Token from "../Token";
 import Url from '../ServerUrl';
 import {useDispatch} from 'react-redux';
@@ -16,7 +16,7 @@ const MasterCodes = (props:any):any => {
 
     const dispatch = useDispatch();
 
-    const processData = (data:Format) =>{
+    const processData = (data:any) =>{
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -29,7 +29,7 @@ const MasterCodes = (props:any):any => {
         
         show    : async(user:showMasterCodes)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -48,7 +48,7 @@ const MasterCodes = (props:any):any => {
 
         get     : async(id:number)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -66,7 +66,7 @@ const MasterCodes = (props:any):any => {
 
         update  : async(up:any)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -84,7 +84,7 @@ const MasterCodes = (props:any):any => {
         },
         add     : async(pml:any)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -103,7 +103,7 @@ const MasterCodes = (props:any):any => {
         filter  : async(filter:any)=>{
             const token = Token.get();
             let params = new URLSearchParams(filter).toString();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -116,6 +116,7 @@ const MasterCodes = (props:any):any => {
                 url     : Url.productMasterList+'?filter=true&'+params,
                 method  : 'GET',
             })
+            return processData(format);
         },
     }));    
 

@@ -1,5 +1,5 @@
 import { Products as pr,status } from './Types';
-import { Requests, Token } from '../../Services';
+import {Token } from '../../Services';
 import { request } from 'Services/Requests/StaticMethods';
 import Url from 'Services/ServerUrl';
 
@@ -9,9 +9,6 @@ interface params{
 }
 export const Products = () => {
         return async (dispatch:any,getState:any) => {
-
-
-            console.log(getState());
 
             let tempProduct = getState().Products.data;
             let params = getState().Products.params;
@@ -38,17 +35,13 @@ export const Products = () => {
             if (a.status === 200) {
                 dispatch({type    : pr.data,payload : a,});
                 dispatch({type    : pr.status,payload : "done",});
-
                 return;
             }
 
-            if(a.network_error){
-                dispatch({type    : status.error,payload : true,});
-                dispatch({type    : pr.data,payload : tempProduct});
-                dispatch({type    : pr.status,payload : "pending",});
-                return;
-            }
-
+            dispatch({type    : status.error,payload : true,});
+            dispatch({type    : pr.status,payload : "pending",});
+            dispatch({type    : pr.data,payload : tempProduct});
+            return;
         }
 }
 
@@ -70,8 +63,29 @@ export const ProductsParams = (data:any) => {
     }
 }
 
-// export const ProductsStatus = (data:any) => {
-//     return async (dispatch:any) => {    
-//         dispatch({type:pr.params,payload:data});
-//     }
-// }
+export const ProductsGraph = () => {
+    return async (dispatch:any,getState:any) => {    
+        let tempGraph = getState().Products.graph;
+
+
+        const token = Token.get();
+        if(token === '' || token === null){
+            dispatch({type    : status.loggedIn,payload : false});
+            return;
+        }
+
+        const a = await request({
+            url     : Url.status,
+            method  : 'GET',
+        })
+
+        if (a.status === 200) {
+            dispatch({type    : pr.graph,payload : a,});
+            return;
+        }
+
+        dispatch({type    : status.error,payload : true,});
+        dispatch({type    : pr.graph,payload : tempGraph});
+        return;
+    }
+}

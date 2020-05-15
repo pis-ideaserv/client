@@ -28,7 +28,7 @@ export const Navigation = [
         middleware  : ComponentMiddleware,
         exact       : false
     },{
-        path        : "/activities",
+        path        : "/reports",
         component   : Component.Reports,
         middleware  : ComponentMiddleware,
         exact       : false

@@ -29,12 +29,10 @@ export const MasterCodes = () => {
             return;
         }
 
-        if(a.network_error){
-            dispatch({type    : status.error,payload : true,});
-            dispatch({type    : MC.data,payload:tempMasterCode});
-            dispatch({type    : MC.status,payload : 'done',});
-            return
-        }
+        dispatch({type    : status.error,payload : true,});
+        dispatch({type    : MC.data,payload:tempMasterCode});
+        dispatch({type    : MC.status,payload : 'done',});
+        return
     }
 }
 

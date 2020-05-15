@@ -1,8 +1,6 @@
-import { TableRow, TableCell, Popper, Paper, Typography, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
+import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
 import React, { useState } from "react";
-import { DatePicker } from "material-ui-pickers";
-import moment from "moment";
-import {Filter as Filterer} from "Redux/Actions";
+import {Filter as Filterer, UsersParams} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 
@@ -86,13 +84,8 @@ const Filter = (props:any) => {
     }
 
     const submitFilter = async (action:submit,control:control) =>{
-        // reset();
-
         let params = {per_page:10,page:1};
-
-        props.setParams(params);
-
-
+        dispatch(UsersParams(params));
         if(action === "filter"){
             reset();
             if(props.filter[control].key !== ''){
@@ -130,7 +123,7 @@ const Filter = (props:any) => {
                 
                 let a:any = props.filter;
                 a[e.target.name].key = '';    
-                dispatch(Filterer(a,"user",props.params));
+                dispatch(Filterer(a,"user",user.params));
             }
         }
 
@@ -138,7 +131,7 @@ const Filter = (props:any) => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"user",props.params));
+                dispatch(Filterer(props.filter,"user",user.params));
             }
         }
     }
@@ -311,21 +304,20 @@ const Filter = (props:any) => {
                         </Paper>
                     </Popper>
                 </TableCell>
-                <TableCell align="center">
-                    <FormControl variant="outlined" style={{width:'100%'}}>
-                        <Select
-                            value={props.filter.level.key}
-                            onChange={setText}
-                            name="level"
-                            onFocus = {(event)=>controller(event,"level","open")}
-                        >
-                            <MenuItem value={0}>All</MenuItem>
-                            <MenuItem value={1}>Admin</MenuItem>
-                            <MenuItem value={2}>Encoder</MenuItem>
-                            <MenuItem value={3}>Viewer</MenuItem>
-                        </Select>
-                    
-                    </FormControl>
+                <TableCell align="center" className="filter">
+                    <TextField
+                        value={props.filter.level.key}
+                        onChange={setText}
+                        variant="outlined"
+                        select
+                        className="input"
+                        onFocus = {(event)=>controller(event,"level","open")}
+                    >
+                        <MenuItem value={0}>All</MenuItem>
+                        <MenuItem value={1}>Admin</MenuItem>
+                        <MenuItem value={2}>Encoder</MenuItem>
+                        <MenuItem value={3}>Viewer</MenuItem>
+                    </TextField>
                     <Popper className="text-center" id={Boolean(popper.level)? "simple-popper" : undefined} open={Boolean(popper.level)} anchorEl={popper.level}>
                         <Paper className="popper-paper">
                             <Button variant="contained" color="primary" onClick={()=>setPopper({...popper,level:null})}>
@@ -338,21 +330,20 @@ const Filter = (props:any) => {
                     </Popper>
                 </TableCell>
 
-                <TableCell align="center">
-                    <FormControl variant="outlined" style={{width:'100%'}}>
-                        <Select
+                <TableCell align="center" className="filter">
+                        <TextField
                             value={props.filter.activated.key}
                             onChange={setText}
-                            name="activated"
                             onFocus = {(event)=>controller(event,"activated","open")}
+                            select
+                            className="input"
+                            variant="outlined"
                         >
                             <MenuItem value={0} >All</MenuItem>
                             <MenuItem value={1}>Yes</MenuItem>
                             <MenuItem value={2}>No</MenuItem>
                             
-                        </Select>
-                    
-                    </FormControl>
+                        </TextField>
                     <Popper className="text-center" id={Boolean(popper.activated)? "simple-popper" : undefined} open={Boolean(popper.activated)} anchorEl={popper.activated}>
                         <Paper className="popper-paper">
                             <Button variant="contained" color="primary" onClick={()=>setPopper({...popper,activated:null})}>

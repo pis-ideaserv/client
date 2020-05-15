@@ -1,8 +1,8 @@
-import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
+import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem, InputLabel } from "@material-ui/core"
 import React, { useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
 import moment from "moment";
-import {Filter as Filterer} from "Redux/Actions";
+import {Filter as Filterer,ProductsParams} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 const Filter = (props:any):any => {
@@ -133,7 +133,8 @@ const Filter = (props:any):any => {
         // })
 
         let params = {per_page:10,page:1};
-        props.setParams(params);
+        // props.setParams(params);
+        dispatch(ProductsParams(params));
         
 
         if(action === "filter"){
@@ -172,7 +173,7 @@ const Filter = (props:any):any => {
                 
                 let a:any = props.filter;
                 a[e.target.name].key = '';    
-                dispatch(Filterer(a,"product",props.params));
+                dispatch(Filterer(a,"product",products.params));
             }
         }
 
@@ -180,7 +181,7 @@ const Filter = (props:any):any => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"product",props.params));
+                dispatch(Filterer(props.filter,"product",products.params));
             }
         }
     }
@@ -191,7 +192,7 @@ const Filter = (props:any):any => {
             <TableRow>
                 <TableCell align="center" className="filter" hidden={!products.table.supplier_code.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -233,7 +234,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.supplier_name.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -275,7 +276,7 @@ const Filter = (props:any):any => {
                 <TableCell align="center" className="filter" hidden={!products.table.product_code.show}>
                     
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -317,7 +318,7 @@ const Filter = (props:any):any => {
                 
                 <TableCell align="center" className="filter" hidden={!products.table.product_name.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -358,7 +359,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.category.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -399,7 +400,7 @@ const Filter = (props:any):any => {
                 
                 <TableCell align="center" className="filter" hidden={!products.table.serial.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -440,7 +441,7 @@ const Filter = (props:any):any => {
                 
                 <TableCell align="center" className="filter" hidden={!products.table.warranty.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -495,10 +496,11 @@ const Filter = (props:any):any => {
                                 }
                             }
                         )}
-                        value = {props.filter.warranty_start.key == '' ? null : moment(props.filter.warranty_start.key).format()}
+                        value = {props.filter.warranty_start.key === '' ? null : moment(props.filter.warranty_start.key).format()}
                         onFocus = {(event)=>controller(event,"warranty_start","open")}
                         // cancelLabel = {<Button>Cancel</Button>}
                         // okLabel = {<Button>OK</Button>}
+                        inputVariant="outlined"
                     />
 
 
@@ -545,9 +547,10 @@ const Filter = (props:any):any => {
                                     }
                                 })
                             }}
-                        value = {props.filter.warranty_end.key == '' ? null : moment(props.filter.warranty_end.key).format()}
+                        value = {props.filter.warranty_end.key === '' ? null : moment(props.filter.warranty_end.key).format()}
                         onFocus = {(event)=>controller(event,"warranty_end","open")}
                         // onKeyDown = {onKey}
+                        inputVariant="outlined"
                     />
                     <Popper className="text-center" id={Boolean(popper.warranty_end)? "simple-popper" : undefined} open={Boolean(popper.warranty_end)} anchorEl={popper.warranty_end}>
                         <Paper className="popper-paper">
@@ -576,21 +579,24 @@ const Filter = (props:any):any => {
                 </TableCell>
                 
                 <TableCell align="center" className="filter" hidden={!products.table.status.show}>
-                    <FormControl variant="outlined" style={{width:'100%'}}>
-                        <Select
+                    {/* <FormControl variant="outlined" style={{width:'100%'}}> */}
+                        <TextField
                             value={props.filter.status.key}
                             onChange={setText}
-                            name="status"
+                            // name="status"
                             onFocus = {(event)=>controller(event,"status","open")}
+                            variant="outlined"
+                            select
+                            className="input"
                         >
                             <MenuItem value={0}>All</MenuItem>
                             <MenuItem value={1}>New</MenuItem>
                             <MenuItem value={2}>Replaced</MenuItem>
                             <MenuItem value={3}>Returned</MenuItem>
                             <MenuItem value={4}>Repaired</MenuItem>                        
-                        </Select>
+                        </TextField>
                     
-                    </FormControl>
+                    {/* </FormControl> */}
                     <Popper className="text-center" id={Boolean(popper.status)? "simple-popper" : undefined} open={Boolean(popper.status)} anchorEl={popper.status}>
                         <Paper className="popper-paper">
                             <Button variant="contained" color="primary" onClick={()=>setPopper({...popper,status:null})}>
@@ -610,6 +616,7 @@ const Filter = (props:any):any => {
                         animateYearScrolling
                         variant = "dialog"
                         className="input"
+                        inputVariant="outlined"
                         onChange = {(event) => props.setFilter({
                                 ...props.filter,
                                 delivery_date: {
@@ -618,7 +625,7 @@ const Filter = (props:any):any => {
                                 }
                             }
                         )}
-                        value = {props.filter.delivery_date.key == '' ? null : moment(props.filter.delivery_date.key).format()}
+                        value = {props.filter.delivery_date.key === '' ? null : moment(props.filter.delivery_date.key).format()}
                         onFocus = {(event)=>controller(event,"delivery_date","open")}
                     />
 
@@ -652,7 +659,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.reference_delivery_document.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -693,7 +700,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.created_by.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"
@@ -734,7 +741,7 @@ const Filter = (props:any):any => {
 
                 <TableCell align="center" className="filter" hidden={!products.table.remarks.show}>
                     <TextField
-                        id="outlined-email-input"
+                        
                         className="input"
                         autoComplete="off"
                         margin="normal"

@@ -65,10 +65,11 @@ const SidebarList = (props:any) => {
 
     const open = Boolean(anchorEl);
 
-    const popper = (title:any,open:boolean) => (
+    const popper = (event:any,title:any,open:boolean) => (
         event: any,
       ) => {
         if(!props.sidebar){
+            // console.log(event);
             // console.log(event);
             setPopperTitle(title.name);
             setPopperAnchor(event.currentTarget);
@@ -93,7 +94,7 @@ const SidebarList = (props:any) => {
             <List /*className={!props.sidebar ? classes.root : ''}*/ style={{paddingTop:'4px'}}>
                 {list.map((text:any, index:number) => (
                     <React.Fragment key={index} >
-                        <ListItem onMouseEnter={popper(text,true)} onMouseLeave={popper('',false)} className={text.control === control ? "active-nav" : ""} button onClick={()=>{
+                        <ListItem onMouseEnter={(event) => popper(event,text,true)} onMouseLeave={(event) => popper(event,'',false)} className={text.control === control ? "active-nav" : ""} button onClick={()=>{
                             
                             // if(!props.sidebar){
                             //     props.toggleSidebar();

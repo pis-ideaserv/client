@@ -1,32 +1,19 @@
 import React from 'react';
-import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogContentText, FormControl, InputLabel, Select, MenuItem, FormControlLabel, DialogActions } from '@material-ui/core';
-import { Dropbox, VanUtility, Account } from 'mdi-material-ui';
-import { ArrowForward } from '@material-ui/icons';
-import {withRouter, Switch} from 'react-router-dom';
-import { Requests } from 'Services';
+import { Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Fab } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import moment from 'moment';
-import {Suppliers,Users,Products,NavigationTitle} from "Redux/Actions"
+import {NavigationTitle,LogsParams,Filter as Filterer,Logs} from "Redux/Actions"
 import {useDispatch, useSelector} from "react-redux";
-import Chart from 'react-google-charts';
+import { Cached } from '@material-ui/icons';
 
-const Reports = ( props :any ) => {
+const Reports = ( ) => {
 
-    const logsRequest:any = React.useRef();
-    const statusRequest:any = React.useRef();
-
+    const logs = useSelector((state:any)=>state.Logs);
     const dispatch = useDispatch();
-    const users = useSelector((state:any) => state.Users.data); 
-    const products = useSelector((state:any) => state.Products.data); 
-    const suppliers = useSelector((state:any) => state.Suppliers.data);
-    const [status,setStatus] = React.useState();
 
     React.useEffect(()=>{
-        requestLog();
         dispatch(NavigationTitle({control:'reports'}));
-
         window.addEventListener('scroll', scroll, true);
-        
         return () =>{
             window.removeEventListener('scroll', scroll);
         }
@@ -56,99 +43,31 @@ const Reports = ( props :any ) => {
         }
     }
 
-
-    const requestLog = () => {
-
-        // dispatch(Suppliers({page:1,per_page:10}));
-        // dispatch(Users({page:1,per_page:10}));
-        // dispatch(Products({page:1,per_page:10}));
-
-        setData(null);
-        // const a = Requests.Logs.show({per_page:rowsPerPage,page:page}).then((response:any)=>{
-        //     setData(response.data);
-        // });
-
-        const a = logsRequest.current.show({per_page:rowsPerPage,page:page}).then((response:any)=>{
-            setData(response.data);     
-        });
-        
-
-
-        //status
-
-        // Requests.Status.show().then((response:any)=>{
-        //     // setStatus(response.data);
-
-        //     setStatus([
-        //         ['Task','Products Status'],
-        //         ['New',response.data.status.New],
-        //         ['Replaced',response.data.status.Replaced],
-        //         ['Returned',response.data.status.Returned],
-        //         ['Repaired',response.data.status.Repaired],
-        //     ]);
-        // });
-
-        // statusRequest.current.show().then((response:any)=>{
-        //     // setStatus(response.data);
-
-        //     setStatus([
-        //         ['Task','Products Status'],
-        //         ['New',response.data.status.New],
-        //         ['Replaced',response.data.status.Replaced],
-        //         ['Returned',response.data.status.Returned],
-        //         ['Repaired',response.data.status.Repaired],
-        //     ]);
-        // });
-    }
-
-    // console.log(status);
-
-
-    const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [data, setData] = React.useState();
     const [open, setOpen] = React.useState(false);
-    const [modal,setModal] = React.useState();
-    const [target,setTarget] = React.useState();
+    const [modal,setModal] = React.useState(null);
+    const [target,setTarget] = React.useState(null);
 
 
     const handleChangePage = (event:any, newPage:any) => {
-        setPage(newPage+1);
-        
-        
-
-        //there is a delay when updating state. so instead of {per_page:rowsPerPage,page:page}, we replaced {per_page:rowsPerPage,page:newPage+1} for instant update
-        setData(null);
-        // const a = Requests.Logs.show({per_page:rowsPerPage,page:newPage+1}).then((response:any)=>{
-        //     setData(response.data);
-        // });
-
-        logsRequest.current.show({per_page:rowsPerPage,page:newPage+1}).then((response:any)=>{
-            setData(response.data);
-        });
+        let pams:any = logs.params;
+        pams.page=newPage+1;
+        dispatch(LogsParams(pams));
+        dispatch(Filterer(null,"logs",pams));
 
     };
     
-    const handleChangeRowsPerPage = (event:any) => {
-        if(event.target.value !== rowsPerPage ){
-            setRowsPerPage(event.target.value);
-            setPage(1);
-
-            setData(null);
-            // const a = Requests.Logs.show({per_page:event.target.value,page:1}).then((response:any)=>{
-            //     setData(response.data);
-            // });
-            logsRequest.current.show({per_page:event.target.value,page:1}).then((response:any)=>{
-                setData(response.data);
-            });
-        }        
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const val:any = event.target.value;
+        let paran = {page:1,per_page:val};
+        dispatch(LogsParams(paran));
+        dispatch(Filterer(null,"logs",paran))
     };
 
     
     const skeletonTable = () => {
         let a:any = [];
 
-        const tableCell = <TableCell align="right"><Skeleton variant="rect" /></TableCell>;
+        const tableCell = <TableCell align="right"><Skeleton variant="rect" width={'100%'} height={20}  /></TableCell>;
         for(let i = 0;i < 10;i++ ){
             a.push(
                 <TableRow key={i}>
@@ -365,12 +284,15 @@ const Reports = ( props :any ) => {
 
     return(
         <div>
-            <Requests.Logs request={logsRequest} />
-            <Requests.Status request ={statusRequest} />
             {dataModal()}
-            <Paper style={{whiteSpace:'nowrap'}} className="paper-table">
+            <Paper style={{whiteSpace:'nowrap'}} className="paper-table main-content">
                 <div className="header">
                     <div className="title">User Activities</div>
+                    <div className="controls">
+                        <Fab size="small" disabled={logs.status!=="done"} className={logs.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(Logs())} color="primary" >
+                                <Cached />
+                        </Fab>
+                    </div>
                 </div>
                 <div className="custom-table">
                     <Table size="small">
@@ -386,8 +308,8 @@ const Reports = ( props :any ) => {
                         </TableHead>
                         <TableBody>
                             {
-                                data ?
-                                data.data.map( (value:any,key:any) =>
+                                logs.data ?
+                                logs.data.data.data.map( (value:any) =>
                                     <TableRow key={value.id} hover>
                                         <TableCell>{moment(value.updated_at).format('ll, h:mm a')}</TableCell>
                                         <TableCell style={{textTransform:'uppercase'}}>{value.user.first_name+" "+value.user.last_name}</TableCell>
@@ -426,9 +348,9 @@ const Reports = ( props :any ) => {
                 <TablePagination
                     rowsPerPageOptions={[10,25,50,100]}
                     component="div"
-                    count={data ? data.meta.total : 10}
-                    rowsPerPage={rowsPerPage}
-                    page={data ? page-1 : 0}
+                    count={logs.data ? logs.data.data.meta.total : 10}
+                    rowsPerPage={logs.params.per_page}
+                    page={logs.data ? logs.params.page-1 : 0}
                     backIconButtonProps={{
                         'aria-label': 'previous page',
                     }}

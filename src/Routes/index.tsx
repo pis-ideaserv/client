@@ -8,15 +8,15 @@ import Caller from 'Services/Caller';
 
 const Navigations = (props:any) =>{
 
-    const status = useSelector((state:any)=>state.status.loggedIn);
+    const status = useSelector((state:any)=>state.status);
 
     return(
         <React.Fragment>
-            <div className="container-body">
+            {/* <div className="container-body"> */}
                 <div className="container">
                     <Caller />
                     <BrowserRouter> 
-                        {status ? <Component.Navigation />: ''}
+                        {status.loggedIn && status.caller ? <Component.Navigation />: ''}
                         <Switch>
                             {
                                 Navigation.map((element,index) => 
@@ -33,7 +33,7 @@ const Navigations = (props:any) =>{
                         </Switch>
                     </BrowserRouter>
                 </div>
-            </div>
+            {/* </div> */}
         </React.Fragment>
     );
 }

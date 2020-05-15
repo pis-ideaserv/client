@@ -28,13 +28,11 @@ export const Users = () => {
                 dispatch({type    : pr.status,payload : "done",});
                 return;
             }
-
-            if(a.network_error){
-                dispatch({type    : status.error,payload : true});
-                dispatch({type    : pr.status,payload : "done",});
-                dispatch({type    : pr.data,payload : tempData,});
-                return
-            }
+            
+            dispatch({type    : status.error,payload : true});
+            dispatch({type    : pr.status,payload : "done",});
+            dispatch({type    : pr.data,payload : tempData,});
+            return;
 
         }
 }

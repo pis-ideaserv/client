@@ -27,12 +27,12 @@ const initialState = {
 		created_by		: {name : 'Created By',			show : false,asc:ascVal},
 		remarks 		: {name : 'Remarks',			show : false,asc:ascVal}
 	},
+	graph : {},
 	filter : false,
 	status : stat,
 	params : {
 		page : 1,
 		per_page : 10,
-		filter : '',
 	}
 };
 
@@ -64,8 +64,12 @@ const Products = (state = initialState, action:any) => {
 				...state,
 				status : action.payload
 			}
+		case pr.graph :
+			return{
+				...state,
+				graph : action.payload,
+			}
     	default:
-			// console.log(action,state);
       		return state;
  	}
 }

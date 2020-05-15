@@ -3,6 +3,12 @@ import { Users as users } from '../Actions/Types';
 const initialState = {
 	data : '',
 	filter : false,
+	params : {
+		page : 1,
+		per_page : 10,
+		filter : "",
+	},
+	status : "done",
 };
 
 const Users = (state = initialState, action:any) => {
@@ -17,6 +23,16 @@ const Users = (state = initialState, action:any) => {
 			return {
 				...state,
 				filter : action.payload
+			}
+		case users.params:
+			return {
+				...state,
+				params : action.payload
+			}
+		case users.status:
+			return{
+				...state,
+				status : action.payload
 			}
     	default:
       		return state;

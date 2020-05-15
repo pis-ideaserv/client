@@ -1,12 +1,18 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { NavigationTitle,Suppliers as supplierAction,SuppliersFilter, Filter as Filterer } from 'Redux/Actions';
+import { 
+    NavigationTitle,
+    Suppliers as supplierAction,
+    SuppliersFilter,
+    SuppliersParams, 
+    Filter as Filterer 
+} from 'Redux/Actions';
 import { useSnackbar } from 'notistack';
 import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, DialogContent, CircularProgress, Fab } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Close, CloudUpload, FilterList } from '@material-ui/icons';
+import { Close, CloudUpload, FilterList, Cached } from '@material-ui/icons';
 import { Requests } from 'Services';
 import Filter from './Filter';
 import Add from './Add';
@@ -48,14 +54,14 @@ const Suppliers = (props:any) => {
         contact_number: '',
         email         : '',
     };
-    const [params, setParams] = React.useState({page:1,per_page:10});
+    // const [params, setParams] = React.useState({page:1,per_page:10});
 
     //states
     const [modalShow, setModalShow] = React.useState(false);
     const [modalEdit, setModalEdit] = React.useState(false);
     const [modalAdd, setModalAdd]   = React.useState(false);
     const [submit,setSubmit]        = React.useState(false);
-    const [supplier, setSupplier]   = React.useState();
+    const [supplier, setSupplier]   = React.useState(null);
     const [ upload,setUpload ] = React.useState(false);
 
     const [supplierInput, setSupplierInput] = React.useState(initSupplier);
@@ -75,9 +81,6 @@ const Suppliers = (props:any) => {
 
     React.useEffect(()=>{
         dispatch(NavigationTitle({title : 'Suppliers', control:'suppliers' }));
-        // dispatch(Filterer(filter,"supplier",params));
-        dispatch(supplierAction());
-
         window.addEventListener('scroll', scroll, true);
         return () =>{
             window.removeEventListener('scroll', scroll);
@@ -113,7 +116,7 @@ const Suppliers = (props:any) => {
     const skeletonTable = () => {
         let a:any = [];
 
-        const tableCell = <TableCell align="right"><Skeleton variant="rect" width={118} height={20} /></TableCell>;
+        const tableCell = <TableCell align="right"><Skeleton variant="rect" width={'100%'} height={20} /></TableCell>;
         for(let i = 0;i < 10;i++ ){
             a.push(
                 <TableRow key={i}>
@@ -240,10 +243,9 @@ const Suppliers = (props:any) => {
     
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number) =>{
 
-        let param = params;
+        let param = supplierState.params;
         param.page = newPage+1;
-        setParams(param);
-
+        dispatch(SuppliersParams(param));
         dispatch(Filterer(filter,"supplier",param));
     }
 
@@ -252,7 +254,8 @@ const Suppliers = (props:any) => {
         
         let paran = {page:1,per_page:val};
 
-        setParams(paran);
+        // setParams(paran);
+        dispatch(SuppliersParams(paran));
         dispatch(Filterer(filter,"supplier",paran));
     };
 
@@ -308,18 +311,16 @@ const Suppliers = (props:any) => {
 
                 await supplierRequest.current.update(supplierInput).then( 
                     (response:any) =>{
-                        console.log(initSupplierError);
                         if(response.network_error){
                             enqueueSnackbar('Network error, please contact administrator!!!',{variant:'error',action:actions});
                             setModalEdit(false);
                         }else{
-                            if(response.status === 200){
+                            if(response.status === 200 && !response.data.hasOwnProperty('status')){
                                 enqueueSnackbar('Supplier successfully updated!!!',{variant:'success',action:actions});
                                 setModalEdit(false);
                                 dispatch(supplierAction());
                             }
                             else{
-                                
                                 enqueueSnackbar('Update failed',{variant:'error',action:actions});
                                 updateErrorState(response.data.errors);
                             }
@@ -341,13 +342,11 @@ const Suppliers = (props:any) => {
                             enqueueSnackbar('Network error, please contact administrator!!!',{variant:'error',action:actions});
                             setModalAdd(false);
                         }else{
-                            if(response.status === 200){
+                            if(response.status === 200 && !response.data.hasOwnProperty('status')){
                                 enqueueSnackbar('Supplier successfully added!!!',{variant:'success',action:actions});
                                 setModalAdd(false);
                                 dispatch(supplierAction());
-                            }
-                            else{
-                                
+                            }else{
                                 enqueueSnackbar('Add new supplier failed',{variant:'error',action:actions});
                                 updateErrorState(response.data.errors);
                             }
@@ -407,24 +406,18 @@ const Suppliers = (props:any) => {
                 type      = "supplier"
             />
 
-            <Paper className="paper-table">
+            <Paper className="paper-table main-content">
                 <div className="header">
                     <div className="title">Suppliers</div>
                     <div className="controls">
+                        <Fab size="small" disabled={supplierState.status!=="done"} className={supplierState.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(supplierAction())} color="primary" >
+                            <Cached />
+                        </Fab>
                         <Fab size="small" color="primary" onClick={()=>{
-                                // console.log(filterSwitch)
                                 dispatch(SuppliersFilter(!supplierState.filter));
-                                // setFilter(initFilter);
-                                // setParams(initParams);
                             }} >
                             <FilterList />
                         </Fab>
-                        {/* <Fab size="small" color="primary" onClick={(event:any)=>{
-                            setTableAnchor(event.currentTarget);
-                            setTableOpen(!tableOpen);
-                        }}>
-                            <ViewColumn />
-                        </Fab> */}
                     </div>
                 </div>
                 <div className="custom-table">
@@ -441,7 +434,7 @@ const Suppliers = (props:any) => {
                         </TableHead>
                         
                         <TableBody>
-                            <Filter filter={filter} setFilter={setFilter} params={params} setParams={setParams}/>
+                            <Filter filter={filter} setFilter={setFilter} />
                             {
                                 supplierState.data ?
                                     supplierState.data.data.data.map((key:any,id:number)=>(
@@ -482,22 +475,18 @@ const Suppliers = (props:any) => {
                         : null
                     }
                     
-                    <table>
-                        <tbody>
-                            <tr>
-                                <TablePagination
-                                    rowsPerPageOptions={[10,25,50,100]}
-                                    colSpan={0}
-                                    count={supplierState.data ? supplierState.data.data.meta.total : 10}
-                                    rowsPerPage={params.per_page}
-                                    page={supplierState.data ? params.page-1 : 0}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
+                    <TablePagination
+                        rowsPerPageOptions={[10,25,50,100]}
+                        component="div"
+                        colSpan={0}
+                        count={supplierState.data ? supplierState.data.data.meta.total : 10}
+                        rowsPerPage={supplierState.params.per_page}
+                        page={supplierState.data ? supplierState.params.page-1 : 0}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                        className="custom-pagination"
+                    />
                 </div>
             </Paper>
         </React.Fragment>

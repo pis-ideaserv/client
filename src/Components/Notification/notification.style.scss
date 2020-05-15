@@ -5,7 +5,7 @@
     }
 
     position: fixed;
-    bottom: 12%;
+    bottom: 22%;
     right: -48px;
     background: #3f50b5 !important;
     transform: rotate(-90deg);
@@ -27,7 +27,11 @@
             & tr{
                 & th{
                     height: 20px;
-                    background: yellow;
+                    // background: yellow;
+                    color: #363638;
+                    white-space: nowrap;
+                    text-transform: uppercase;
+                    font-weight: bolder;
                 }
             }
         }
@@ -35,9 +39,12 @@
         & tbody{
             & tr{
                 & td{
-                    & .MuiSkeleton-root{
-                        
-                    }
+                    // min-width: 200px;
+                    // max-width: 200px;
+                    // overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    color: #544747;
                 }
             }
         }

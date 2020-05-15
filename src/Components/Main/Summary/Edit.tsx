@@ -9,14 +9,12 @@ import {MasterCodes} from 'Redux/Actions'
 import {useDispatch} from 'react-redux';
 import Category from './Category';
 import AsyncCreatableSelect from 'react-select/async-creatable'
+import './summaryStyle.scss';
 
 
 interface Add {
     open : boolean,
     handleClose : any,
-
-    per_page : number,
-    page : number,
     input : any,
     setInput : any,
 }
@@ -49,11 +47,11 @@ const useStyles = makeStyles((theme: Theme) =>
             background : 'white',
             position : 'absolute',
             color : '#757575',
-            marginTop : '-10px',
+            marginTop : '-8px',
             left : '14px',
             zIndex : 1,
             // marginLeft : '40px',
-            // fontSize : '12px', 
+            fontSize : '13px', 
         },
         category : {
             width : '100%'
@@ -68,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
         categoryError : {
             fontSize: '0.75rem',
             color   : '#f11111',
-            position : 'absolute',
+            position : 'absolute', 
         }
     }),
 );
@@ -96,7 +94,7 @@ const Edit = (props:Add) => {
     });
     const [ categoryHandle, setCategoryHandler ] = React.useState(false);
     const [categoryValue,setCategoryValue] = React.useState('');
-    const [categoryPreValue,setCategoryPreValue] = React.useState();
+    const [categoryPreValue,setCategoryPreValue] = React.useState(null);
 
 
     const categoryParams = {
@@ -176,7 +174,7 @@ const Edit = (props:Add) => {
         if(a.network_error){
             enqueueSnackbar("Something went wrong. Plese try again later.",{variant:'error',action:actions});
         }else{
-            if(a.status === 200){
+            if(a.status === 200 && !a.data.hasOwnProperty('status')){
                 enqueueSnackbar("Successfully Updated Product Code",{variant:"success",action:actions});
 
                 // let a = await masterCodesRequest.current.show({per_page:props.per_page,page:props.page});
@@ -189,7 +187,7 @@ const Edit = (props:Add) => {
                 props.handleClose();
             }else{
 
-                if(a.status === 406){
+                if(a.status === 200 && a.data.hasOwnProperty('status')){
                     updateErrorState(a.data.errors);
                 }
                 enqueueSnackbar("Update product code failed",{variant:'error',action:actions});
@@ -270,8 +268,8 @@ const Edit = (props:Add) => {
                             disabled={submit}
                         />
 
-                        <div style={{position:'relative'}}>
-                            <label className={classes.select}>Category</label>
+                        <div className={ error.category.error ? "summary-select-wrapper has-error" : "summary-select-wrapper"} >
+                            <label >Category</label> 
                             <AsyncCreatableSelect
                                 cacheOptions
                                 defaultOptions
@@ -281,11 +279,12 @@ const Edit = (props:Add) => {
                                     setCategoryValue(inputValue);
                                     setCategoryHandler(true);
                                 }}
-                                // value={input.category}
-                                className={classes.category}
+                                className="summary-select-main"
                                 value={categoryPreValue}
                                 required
-                                disabled={submit}
+                                isDisabled={submit}
+                                classNamePrefix="summary-select"
+                                maxMenuHeight={170}
                             />
                             <div hidden={!error.category.error} className={classes.categoryError}>{error.category.message}</div>
                         </div>

@@ -1,15 +1,14 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {NavigationTitle,MasterCodes,Filter as Filterer} from 'Redux/Actions';
-import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, CircularProgress, DialogContent } from '@material-ui/core';
+import {NavigationTitle,MasterCodeParams,Filter as Filterer,MasterCodes} from 'Redux/Actions';
+import { Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, Button, TablePagination, Dialog, CircularProgress, DialogContent, Fab } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Filter from './Filter';
 import Add from './Add';
 import Edit from './Edit';
 import { useSnackbar } from 'notistack';
 import { Requests } from '../../../Services';
-import { Close, CloudUpload } from '@material-ui/icons';
+import { Close, CloudUpload, Cached } from '@material-ui/icons';
 import Upload from 'Components/Upload';
 
 
@@ -17,12 +16,12 @@ import Upload from 'Components/Upload';
 const Summary = (props:any) => {
 
     const dispatch = useDispatch();
-    const masterCode = useSelector( (state:any) => state.MasterCodes.data );
+    const masterCode = useSelector( (state:any) => state.MasterCodes );
     const masterCodesRequest:any = React.useRef();
     const [upload,setUpload] = React.useState(false);
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar(); //snackbar    
-    const [ params, setParams] = React.useState({page:1,per_page:10});
+    // const [ params, setParams] = React.useState({page:1,per_page:10});
     const [filter, setFilter] = React.useState({
         product_code     : {filter:'iet',key:''},
         product_name     : {filter:'iet',key:''},
@@ -30,15 +29,7 @@ const Summary = (props:any) => {
     });
     const [ open, setOpen ] = React.useState(false);
     
-    
-    // const [ upload,setUpload ] = React.useState({ 
-    //     uploading   : false,
-    //     open       : false,
-    //     result    : [], 
-    // });
-
     React.useEffect(()=>{
-        dispatch(MasterCodes());
         dispatch(NavigationTitle({control:"product_master_file_maintenance"}));
 
         window.addEventListener('scroll', scroll, true);
@@ -157,19 +148,6 @@ const Summary = (props:any) => {
         setOpenEdit(!openEdit)
     }
 
-    //**************
-
-
-
-    React.useEffect(()=>{
-        dispatch(NavigationTitle({title : 'Product Master File Maintenance',control:"product_master_file_maintenance"}));
-        dispatch(Filterer(filter,"master",params));
-        
-        // return () => {
-        //     dispatch(NavigationTitle(''));
-        // }
-    },[])
-
     const handleAdd = () => {
         setOpen(!open);
     }
@@ -178,17 +156,17 @@ const Summary = (props:any) => {
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number,) =>{
         // setPage(newPage);
 
-        let pams:any = params;
-        params.page=newPage+1;
-        setParams(pams);
-
+        let pams:any = masterCode.params;
+        pams.page=newPage+1;
+        console.log(pams);
+        dispatch(MasterCodeParams(pams));
         dispatch(Filterer(filter,"master",pams));
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         const val:any = event.target.value;
         let paran = {page:1,per_page:val};
-        setParams(paran);
+        dispatch(MasterCodeParams(paran));
         dispatch(Filterer(filter,"master",paran));
     };
 
@@ -208,7 +186,7 @@ const Summary = (props:any) => {
     const skeletonTable = () => {
         let a:any = [];
 
-        const tableCell = <TableCell align="center"><Skeleton variant="rect" /></TableCell>;
+        const tableCell = <TableCell align="center"><Skeleton variant="rect" width={'100%'} height={20} /></TableCell>;
         for(let i = 0;i < 10;i++ ){
             a.push(
                 <TableRow key={i}>
@@ -225,7 +203,7 @@ const Summary = (props:any) => {
         <React.Fragment>
             <Requests.MasterCodes request={masterCodesRequest} />
             <Add open={open} handleClose={handleAdd}/>
-            <Edit open={openEdit} handleClose={handleEdit} per_page={params.per_page} page={params.page}  input = {input} setInput = {setInput}/>
+            <Edit open={openEdit} handleClose={handleEdit} input = {input} setInput = {setInput}/>
            
             <Upload
                 open      = {upload}
@@ -234,9 +212,14 @@ const Summary = (props:any) => {
             />
             
             
-            <Paper className="paper-table">
+            <Paper className="paper-table main-content">
                 <div className="header">
                     <div className="title">Product Maintenance</div>
+                    <div className="controls">
+                        <Fab size="small" disabled={masterCode.status!=="done"} className={masterCode.status === "done" ? "rotate pause":"rotate" } onClick={()=>dispatch(MasterCodes())} color="primary" >
+                            <Cached />
+                        </Fab>
+                    </div>
                 </div>
                 <div className="custom-table">
                     <Table size="small">
@@ -250,8 +233,8 @@ const Summary = (props:any) => {
                         
                         <TableBody>
                             {
-                                masterCode ?
-                                    masterCode.data.data.map((key:any,id:number)=>(
+                                masterCode.data ?
+                                    masterCode.data.data.data.map((key:any,id:number)=>(
                                         <TableRow key={id}  hover={true} style={{cursor:'pointer'}} onDoubleClick={() => initEdit(key)} >
                                             <TableCell align="left" title={key.product_code}>{key.product_code}</TableCell>
                                             <TableCell align="left" title={key.product_name}>{key.product_name}</TableCell>
@@ -281,24 +264,19 @@ const Summary = (props:any) => {
                         <CloudUpload />&nbsp;  
                         Import file
                     </Button>
-                    <table>
-                        <tbody>
-                            <tr>
 
-                                <TablePagination
-                                    rowsPerPageOptions={[10,25,50,100]}
-                                    colSpan={0}
-                                    count={masterCode ? masterCode.data.meta.total : 10}
-                                    rowsPerPage={params.per_page}
-                                    page={masterCode ? params.page-1 : 0}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                    className="product-pagination"
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
+                    <TablePagination
+                        rowsPerPageOptions={[10,25,50,100]}
+                        colSpan={0}
+                        component="div"
+                        count={masterCode.data ? masterCode.data.data.meta.total : 10}
+                        rowsPerPage={masterCode.params.per_page}
+                        page={masterCode.data ? masterCode.params.page-1 : 0}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                        className="custom-pagination"
+                    />
                 </div>
             </Paper>
         </React.Fragment>

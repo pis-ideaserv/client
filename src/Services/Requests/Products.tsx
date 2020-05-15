@@ -40,7 +40,7 @@ const Products = (props:any):any => {
 
     const dispatch = useDispatch();
 
-    const processData = (data:Format) =>{
+    const processData = (data:any) =>{
         if(data.network_error){
             dispatch(error(true));
             return;
@@ -53,7 +53,7 @@ const Products = (props:any):any => {
 
         show    : async(user?:showProduct)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -72,7 +72,7 @@ const Products = (props:any):any => {
 
         get     : async(id:number)=>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -90,7 +90,7 @@ const Products = (props:any):any => {
 
         update  : async(product:Products) =>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -109,7 +109,7 @@ const Products = (props:any):any => {
 
         add  : async(product:Products) =>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -128,7 +128,7 @@ const Products = (props:any):any => {
 
         search  : async(search:string) =>{
             const token = Token.get();
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -149,7 +149,7 @@ const Products = (props:any):any => {
             const token = Token.get();
             let params = new URLSearchParams(filter).toString();
 
-            let format:Format = {
+            let format = {
                 network_error : false,
                 status        : 0,
                 data          : '',
@@ -162,6 +162,7 @@ const Products = (props:any):any => {
                 url     : Url.products+'?filter=true&'+params,
                 method  : 'GET',
             })
+            return processData(format);
         },
 
     }));
