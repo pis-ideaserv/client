@@ -31,12 +31,11 @@ const Log = (props:any) => {
 
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number) => {
+        setData(null);
         let pams:any = params;
         pams.page=newPage+1;
         call(pams);
         setParams(pams);
-        // dispatch(NotificationsParams(pams));
-        // dispatch(Notifications(pams));
     }
      
     

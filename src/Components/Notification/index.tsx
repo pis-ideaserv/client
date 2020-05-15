@@ -88,7 +88,7 @@ const Notification = () => {
                                 {
                                     notification.data ?
                                         notification.data.data.data.map((value:any,key:number) =>(
-                                            <TableRow hover key={key} className="pointer" onDoubleClick={()=>value.status !== "failed" ? setErrorMessage(value) : null}>
+                                            <TableRow hover key={key} className="pointer" onDoubleClick={()=>value.status === "done" ? setErrorMessage(value) : null}>
                                                 <TableCell>{value.id}</TableCell>
                                                 <TableCell>{value.type}</TableCell>
                                                 <TableCell>
