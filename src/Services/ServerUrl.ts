@@ -1,4 +1,4 @@
-const server_url = 'http://localhost:8090/api/';
+const server_url = '/api/';
 
 const prefix={
     auth        : 'auth/',
