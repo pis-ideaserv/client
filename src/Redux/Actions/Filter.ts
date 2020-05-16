@@ -29,8 +29,6 @@ export const Filter = (filter:any,component:component,extra_params:params) => {
             }
         });
     }
-
-    console.log(params);
     
     switch(component){
         case "supplier" :
