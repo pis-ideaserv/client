@@ -1,0 +1,28 @@
+name: PIS Client
+
+on:    
+  release:
+      types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry (Version Release)
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: pis-ideaserv/client/pis-client
+        username: ${{ github.actor }}
+        password: ${{ secrets.TOKEN }}
+        registry: docker.pkg.github.com
+        tag_names: true
+    - uses:  actions/checkout@master
+    - name: Publish to Registry (Latest Release)
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: pis-ideaserv/client/pis-client:latest
+        username: ${{ github.actor }}
+        password: ${{ secrets.TOKEN }}
+        registry: docker.pkg.github.com
