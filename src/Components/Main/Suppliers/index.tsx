@@ -35,15 +35,6 @@ const Suppliers = (props:any) => {
         email         : {error: false, message : ''}
     };
 
-    const [filter, setFilter] = React.useState({
-        supplier_code       : {filter:'iet',key:''},
-        supplier_name       : {filter:'iet',key:''},
-        address             : {filter:'iet',key:''},
-        contact_person      : {filter:'iet',key:''},
-        contact_number      : {filter:'iet',key:''},
-        email               : {filter:'iet',key:''},
-    });
-
     const initSupplier = {
         id            : '',
         supplier_code : '',
@@ -54,9 +45,7 @@ const Suppliers = (props:any) => {
         contact_number: '',
         email         : '',
     };
-    // const [params, setParams] = React.useState({page:1,per_page:10});
-
-    //states
+    
     const [modalShow, setModalShow] = React.useState(false);
     const [modalEdit, setModalEdit] = React.useState(false);
     const [modalAdd, setModalAdd]   = React.useState(false);
@@ -242,21 +231,20 @@ const Suppliers = (props:any) => {
     };
     
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number) =>{
-
-        let param = supplierState.params;
-        param.page = newPage+1;
-        dispatch(SuppliersParams(param));
-        dispatch(Filterer(filter,"supplier",param));
+        dispatch(SuppliersParams({
+            ...supplierState.params,
+            page : newPage+1,
+        }));
+        dispatch(supplierAction());
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const val:any = event.target.value;
-        
-        let paran = {page:1,per_page:val};
-
-        // setParams(paran);
-        dispatch(SuppliersParams(paran));
-        dispatch(Filterer(filter,"supplier",paran));
+        dispatch(SuppliersParams({
+            ...supplierState.params,
+            per_page : event.target.value,
+            page     : 1 
+        }));
+        dispatch(supplierAction());
     };
 
     const updateInput = (event:any) => {
@@ -434,7 +422,7 @@ const Suppliers = (props:any) => {
                         </TableHead>
                         
                         <TableBody>
-                            <Filter filter={filter} setFilter={setFilter} />
+                            <Filter />
                             {
                                 supplierState.data ?
                                     supplierState.data.data.data.map((key:any,id:number)=>(

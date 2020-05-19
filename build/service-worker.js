@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.6bc2cc272e2d8f75ae1cef002c6c6410.js"
+  "/precache-manifest.97d9f182cd1deee5432805b31f791a65.js"
 );
 
 self.addEventListener('message', (event) => {
@@ -36,29 +36,4 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/index.html"), {
   
   blacklist: [/^\/_/,/\/[^/]+\.[^/]+$/],
-});
-
-
-var cacheName="pis";
-
-self.addEventListener('install', function(event) {
-  event.waitUntil(
-    caches.open(cacheName).then(function(cache) {
-      return cache.addAll(
-        [
-          '/css/bootstrap.css',
-          '/img/ideaserv.png',
-          '/static/css/main.ae9094db.chunks.css',
-          '/static/css/main.ae9094db.chunks.css.map',
-          '/static/js/2.f1175a05.chunk.js',
-          '/static/js/2.f1175a05.chunk.js.map',
-          '/static/js/main.a95504a7.chunk.js',
-          '/static/js/main.a95504a7.chunk.js.map',
-          '/static/js/runtime~main.a8a9905a.js',
-          '/static/js/runtime~main.a8a9905a.js.map',
-          '/index.html'
-        ]
-      );
-    })
-  );
 });

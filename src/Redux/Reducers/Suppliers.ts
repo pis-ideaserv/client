@@ -15,7 +15,14 @@ const initialState = {
 	params : {
 		page : 1,
 		per_page : 10,
-		filter : "",
+		filter : {
+			supplier_code       : {filter:'iet',key:''},
+			supplier_name       : {filter:'iet',key:''},
+			address             : {filter:'iet',key:''},
+			contact_person      : {filter:'iet',key:''},
+			contact_number      : {filter:'iet',key:''},
+			email               : {filter:'iet',key:''},
+		},
 	}
 };
 

@@ -6,7 +6,6 @@ export const Products           = {
     filter  : 'pfilter',
     params  : 'pparams',
     status  : "pstatus",
-    graph   : "graph",
 };
 export const Suppliers          = {
     data    : "sdata",
@@ -42,6 +41,7 @@ export const status = {
     error       : 'error',
     loggedIn    : 'loggedIn',
     caller      : 'caller',
+    graph       : "graph",
 }
 
 export const Activities  = {

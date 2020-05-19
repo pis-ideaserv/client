@@ -2,7 +2,7 @@ import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Sel
 import React, { useState } from "react";
 import { DatePicker } from "@material-ui/pickers";
 import moment from "moment";
-import {Filter as Filterer,ProductsParams} from "Redux/Actions";
+import {Filter as Filterer,ProductsParams,Products} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 const Filter = (props:any):any => {
@@ -87,7 +87,6 @@ const Filter = (props:any):any => {
     }
     
     const controller = (event:any,control:control,action:action) => {
-
         reset();
         
         if(action === "open"){
@@ -104,58 +103,57 @@ const Filter = (props:any):any => {
     }
 
     const setText=(event:any) =>{
-        let a:control = event.target.name;
-        props.setFilter({
-            ...props.filter,
-            [event.target.name] : {
-                ...props.filter[a],
-                key : event.target.value,
+        dispatch(ProductsParams({
+            ...products.params,
+            filter : {
+                ...products.params.filter,
+                [event.target.name] : {
+                    ...products.params.filter[event.target.name],
+                    key : event.target.value,
+                }
             }
-        });
+        }));
     }
 
     const setFilterControl=(event:any) =>{
-        let a:control = event.target.name;
-        props.setFilter({
-            ...props.filter,
-            [event.target.name] : {
-                ...props.filter[a],
-                filter : event.target.value,
+        dispatch(ProductsParams({
+            ...products.params,
+            filter : {
+                ...products.params.filter,
+                [event.target.name] : {
+                    ...products.params.filter[event.target.name],
+                    filter : event.target.value,
+                }
             }
-        });
+        }));
     }
 
     const submitFilter = async (action:submit,control:control) =>{
-        
-        // setPopper({
-        //     ...popper,
-        //     [control] : null,
-        // })
-
-        let params = {per_page:10,page:1};
-        // props.setParams(params);
-        dispatch(ProductsParams(params));
-        
+        dispatch(ProductsParams({
+            ...products.params,
+            per_page    : 10,
+            page        : 1,
+        }));
+       
 
         if(action === "filter"){
             reset();
-            if(props.filter[control].key !== ''){
-                dispatch(Filterer(props.filter,"product",params));
+            if(products.params.filter[control].key !== ''){
+                dispatch(Products());
             }
         }else{
-            if(props.filter[control].key !== ''){
-                let a = props.filter;
-
-                props.setFilter({
-                    ...props.filter,
-                    [control] : {
-                        ...props.filter[control],
-                        key : ''
+            if(products.params.filter[control].key !== ''){
+                dispatch(ProductsParams({
+                    ...products.params,
+                    filter : {
+                        ...products.params.filter,
+                        [control] : {
+                            ...products.params.filter[control],
+                            key : '',
+                        }
                     }
-                });
-                
-                a[control].key = "";
-                dispatch(Filterer(a,"product",params));
+                }));
+                dispatch(Products());
             }else{
                 setPopper({
                     ...popper,
@@ -169,11 +167,16 @@ const Filter = (props:any):any => {
 
         if(e.key === "Backspace"){
             if(e.target.value.length === 1){
-                // reset();
-                
-                let a:any = props.filter;
-                a[e.target.name].key = '';    
-                dispatch(Filterer(a,"product",products.params));
+                dispatch(ProductsParams({
+                    ...products.params,
+                    filter : {
+                        ...products.params.filter,
+                        [e.target.name] : {
+                            ...products.params.filter[e.target.name],
+                            key : '',
+                        }
+                    }
+                }));
             }
         }
 
@@ -181,7 +184,7 @@ const Filter = (props:any):any => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"product",products.params));
+                dispatch(Products());
             }
         }
     }
@@ -198,7 +201,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "supplier"
-                        value = {props.filter.supplier.key}
+                        value = {products.params.filter.supplier.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"supplier","open")}
                         onKeyDown = {onKey}
@@ -209,7 +212,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.supplier.filter}
+                                    value={products.params.filter.supplier.filter}
                                     onChange={setFilterControl}
                                     name = "supplier"
                                 >
@@ -223,9 +226,9 @@ const Filter = (props:any):any => {
                             </FormControl>
                             
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","supplier")}>
-                                {props.filter.supplier.key === '' ?'Close' : 'Clear'}
+                                {products.params.filter.supplier.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier")} disabled={props.filter.supplier.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier")} disabled={products.params.filter.supplier.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -240,7 +243,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "supplier_name"
-                        value = {props.filter.supplier_name.key}
+                        value = {products.params.filter.supplier_name.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"supplier_name","open")}
                         onKeyDown = {onKey}
@@ -251,7 +254,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.supplier_name.filter}
+                                    value={products.params.filter.supplier_name.filter}
                                     onChange={setFilterControl}
                                     name = "supplier_name"
                                 >
@@ -264,9 +267,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","supplier_name")}>
-                                {props.filter.supplier_name.key === '' ?'Close' : 'Clear'}
+                                {products.params.filter.supplier_name.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier_name")} disabled={props.filter.supplier_name.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier_name")} disabled={products.params.filter.supplier_name.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -282,7 +285,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "product"
-                        value = {props.filter.product.key}
+                        value = {products.params.filter.product.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"product","open")}
                         onKeyDown = {onKey}
@@ -293,7 +296,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.product.filter}
+                                    value={products.params.filter.product.filter}
                                     onChange={setFilterControl}
                                     name = "product"
                                 >
@@ -306,9 +309,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","product")}>
-                                {props.filter.product.key === '' ?'Close' : 'Clear'}
+                                {products.params.filter.product.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","product")} disabled={props.filter.product.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","product")} disabled={products.params.filter.product.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -324,7 +327,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "product_description"
-                        value = {props.filter.product_description.key}
+                        value = {products.params.filter.product_description.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"product_description","open")}
                         onKeyDown = {onKey}
@@ -335,7 +338,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.product_description.filter}
+                                    value={products.params.filter.product_description.filter}
                                     onChange={setFilterControl}
                                     name = "product_description"
                                 >
@@ -348,9 +351,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","product_description")}>
-                                {props.filter.product_description.key === '' ?'Close' : 'Clear'}
+                                {products.params.filter.product_description.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","product_description")} disabled={props.filter.product_description.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","product_description")} disabled={products.params.filter.product_description.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -365,7 +368,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "category"
-                        value = {props.filter.category.key}
+                        value = {products.params.filter.category.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"category","open")}
                         onKeyDown = {onKey}
@@ -376,7 +379,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.category.filter}
+                                    value={products.params.filter.category.filter}
                                     onChange={setFilterControl}
                                     name = "category"
                                 >
@@ -389,9 +392,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","category")}>
-                                {props.filter.category.key === '' ?'Close' : 'Clear'}
+                                {products.params.filter.category.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","category")} disabled={props.filter.category.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","category")} disabled={products.params.filter.category.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -406,7 +409,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "serial_number"
-                        value = {props.filter.serial_number.key}
+                        value = {products.params.filter.serial_number.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"serial_number","open")}
                         onKeyDown = {onKey}
@@ -417,7 +420,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.serial_number.filter}
+                                    value={products.params.filter.serial_number.filter}
                                     onChange={setFilterControl}
                                     name = "serial_number"
                                 >
@@ -430,9 +433,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","serial_number")}>
-                                {props.filter.serial_number.key === '' ?'Close' : 'Clear'}                        
+                                {products.params.filter.serial_number.key === '' ?'Close' : 'Clear'}                        
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","serial_number")} disabled={props.filter.serial_number.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","serial_number")} disabled={products.params.filter.serial_number.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -448,7 +451,7 @@ const Filter = (props:any):any => {
                         variant="outlined"
                         type = "number"
                         name = "warranty"
-                        value = {props.filter.warranty.key}
+                        value = {products.params.filter.warranty.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"warranty","open")}
                         onKeyDown = {onKey}
@@ -459,7 +462,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.warranty.filter}
+                                    value={products.params.filter.warranty.filter}
                                     onChange={setFilterControl}
                                     name = "warranty"
                                 >
@@ -472,9 +475,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","warranty")}>
-                                {props.filter.warranty.key === '' ?'Close' : 'Clear'}                                                    
+                                {products.params.filter.warranty.key === '' ?'Close' : 'Clear'}                                                    
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","warranty")} disabled={props.filter.warranty.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","warranty")} disabled={products.params.filter.warranty.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -488,15 +491,18 @@ const Filter = (props:any):any => {
                         animateYearScrolling
                         variant = "dialog"
                         className="input"
-                        onChange = {(event) => props.setFilter({
-                                ...props.filter,
-                                warranty_start: {
-                                    ...props.filter['warranty_start'],
-                                    key : moment(event).format("YYYY-MM-DD")
+                        onChange = {(event) => dispatch(ProductsParams({
+                                ...products.params,
+                                filter : {
+                                    ...products.params.filter,
+                                    warranty_start : {
+                                        ...products.params.filter['warranty_start'],
+                                        key : moment(event).format("YYYY-MM-DD"),
+                                    }
                                 }
-                            }
-                        )}
-                        value = {props.filter.warranty_start.key === '' ? null : moment(props.filter.warranty_start.key).format()}
+                            }))
+                        }
+                        value = {products.params.filter.warranty_start.key === '' ? null : moment(products.params.filter.warranty_start.key).format()}
                         onFocus = {(event)=>controller(event,"warranty_start","open")}
                         // cancelLabel = {<Button>Cancel</Button>}
                         // okLabel = {<Button>OK</Button>}
@@ -509,7 +515,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.warranty_start.filter}
+                                    value={products.params.filter.warranty_start.filter}
                                     onChange={setFilterControl}
                                     name = "warranty_start"
                                 >
@@ -522,9 +528,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","warranty_start")}>
-                                {props.filter.warranty_start.key === '' ?'Close' : 'Clear'}                             
+                                {products.params.filter.warranty_start.key === '' ?'Close' : 'Clear'}                             
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","warranty_start")} disabled={props.filter.warranty_start.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","warranty_start")} disabled={products.params.filter.warranty_start.key === '' }>
                                 Filter
                             </Button>
                         </Paper>
@@ -538,16 +544,18 @@ const Filter = (props:any):any => {
                         animateYearScrolling
                         variant = "dialog"
                         className="input"
-                        onChange = {(event) => {
-                                props.setFilter({
-                                    ...props.filter,
-                                    warranty_end:{
-                                        ...props.filter['warranty_end'],
-                                        key : moment(event).format("YYYY-MM-DD")
+                        onChange = {(event) => dispatch(ProductsParams({
+                                    ...products.params,
+                                    filter : {
+                                        ...products.params.filter,
+                                        warranty_end : {
+                                            ...products.params.filter['warranty_end'],
+                                            key : moment(event).format("YYYY-MM-DD"),
+                                        }
                                     }
                                 })
-                            }}
-                        value = {props.filter.warranty_end.key === '' ? null : moment(props.filter.warranty_end.key).format()}
+                            )}
+                        value = {products.params.filter.warranty_end.key === '' ? null : moment(products.params.filter.warranty_end.key).format()}
                         onFocus = {(event)=>controller(event,"warranty_end","open")}
                         // onKeyDown = {onKey}
                         inputVariant="outlined"
@@ -556,7 +564,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.warranty_end.filter}
+                                    value={products.params.filter.warranty_end.filter}
                                     onChange={setFilterControl}
                                     name = "warranty_end"
                                 >
@@ -569,9 +577,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","warranty_end")}>
-                                {props.filter.warranty_end.key === '' ?'Close' : 'Clear'}
+                                {products.params.filter.warranty_end.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","warranty_end")} disabled={props.filter.warranty_end.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","warranty_end")} disabled={products.params.filter.warranty_end.key === '' }>
                                 Filter
                             </Button>
                         </Paper>
@@ -581,9 +589,9 @@ const Filter = (props:any):any => {
                 <TableCell align="center" className="filter" hidden={!products.table.status.show}>
                     {/* <FormControl variant="outlined" style={{width:'100%'}}> */}
                         <TextField
-                            value={props.filter.status.key}
+                            value={products.params.filter.status.key}
                             onChange={setText}
-                            // name="status"
+                            name="status"
                             onFocus = {(event)=>controller(event,"status","open")}
                             variant="outlined"
                             select
@@ -617,15 +625,18 @@ const Filter = (props:any):any => {
                         variant = "dialog"
                         className="input"
                         inputVariant="outlined"
-                        onChange = {(event) => props.setFilter({
-                                ...props.filter,
-                                delivery_date: {
-                                    ...props.filter['delivery_date'],
-                                    key : moment(event).format("YYYY-MM-DD")
+                        onChange = {(event) => dispatch(ProductsParams({
+                                ...products.params,
+                                filter : {
+                                    ...products.params.filter,
+                                    delivery_date : {
+                                        ...products.params.filter['delivery_date'],
+                                        key : moment(event).format("YYYY-MM-DD"),
+                                    }
                                 }
-                            }
-                        )}
-                        value = {props.filter.delivery_date.key === '' ? null : moment(props.filter.delivery_date.key).format()}
+                            }))
+                        }
+                        value = {products.params.filter.delivery_date.key === '' ? null : moment(products.params.filter.delivery_date.key).format()}
                         onFocus = {(event)=>controller(event,"delivery_date","open")}
                     />
 
@@ -635,7 +646,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.delivery_date.filter}
+                                    value={products.params.filter.delivery_date.filter}
                                     onChange={setFilterControl}
                                     name = "delivery_date"
                                 >
@@ -648,9 +659,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","delivery_date")}>
-                                {props.filter.delivery_date.key === '' ?'Close' : 'Clear'}                             
+                                {products.params.filter.delivery_date.key === '' ?'Close' : 'Clear'}                             
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","delivery_date")} disabled={props.filter.delivery_date.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","delivery_date")} disabled={products.params.filter.delivery_date.key === '' }>
                                 Filter
                             </Button>
                         </Paper>
@@ -665,7 +676,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "reference_delivery_document"
-                        value = {props.filter.reference_delivery_document.key}
+                        value = {products.params.filter.reference_delivery_document.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"reference_delivery_document","open")}
                         onKeyDown = {onKey}
@@ -676,7 +687,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.reference_delivery_document.filter}
+                                    value={products.params.filter.reference_delivery_document.filter}
                                     onChange={setFilterControl}
                                     name = "reference_delivery_document"
                                 >
@@ -689,9 +700,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","reference_delivery_document")}>
-                                {props.filter.reference_delivery_document.key === '' ?'Close' : 'Clear'}                        
+                                {products.params.filter.reference_delivery_document.key === '' ?'Close' : 'Clear'}                        
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","reference_delivery_document")} disabled={props.filter.reference_delivery_document.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","reference_delivery_document")} disabled={products.params.filter.reference_delivery_document.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -706,7 +717,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "created_by"
-                        value = {props.filter.created_by.key}
+                        value = {products.params.filter.created_by.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"created_by","open")}
                         onKeyDown = {onKey}
@@ -717,7 +728,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.created_by.filter}
+                                    value={products.params.filter.created_by.filter}
                                     onChange={setFilterControl}
                                     name = "created_by"
                                 >
@@ -730,9 +741,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","created_by")}>
-                                {props.filter.created_by.key === '' ?'Close' : 'Clear'}                        
+                                {products.params.filter.created_by.key === '' ?'Close' : 'Clear'}                        
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","created_by")} disabled={props.filter.created_by.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","created_by")} disabled={products.params.filter.created_by.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -747,7 +758,7 @@ const Filter = (props:any):any => {
                         margin="normal"
                         variant="outlined"
                         name = "remarks"
-                        value = {props.filter.remarks.key}
+                        value = {products.params.filter.remarks.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"remarks","open")}
                         onKeyDown = {onKey}
@@ -758,7 +769,7 @@ const Filter = (props:any):any => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.remarks.filter}
+                                    value={products.params.filter.remarks.filter}
                                     onChange={setFilterControl}
                                     name = "remarks"
                                 >
@@ -771,9 +782,9 @@ const Filter = (props:any):any => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","remarks")}>
-                                {props.filter.remarks.key === '' ?'Close' : 'Clear'}                        
+                                {products.params.filter.remarks.key === '' ?'Close' : 'Clear'}                        
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","remarks")} disabled={props.filter.remarks.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","remarks")} disabled={products.params.filter.remarks.key === ''}>
                                 Filter
                             </Button>
                         </Paper>

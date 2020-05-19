@@ -24,7 +24,7 @@ const Caller = ():any => {
 
     let list:any = {
         me      : {type:UAType,params:{url: Url.me,method  : 'GET'}},
-        graph   : {type:PType.graph,params:{url: Url.status,method  : 'GET',}},
+        graph   : {type:status.graph,params:{url: Url.status,method  : 'GET',}},
         products: {type:PType.data,params:{url:Url.products,method:"GET",params:state.Products.params}},
         suppliers:{type:SType.data,params:{url: Url.suppliers,method  : 'GET',params    : state.Suppliers.params,}},
         users   : {type:UType.data,params:{url:Url.user,method:"GET",params:state.Users.params}},

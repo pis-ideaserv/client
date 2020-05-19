@@ -1,6 +1,6 @@
 import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
 import React, { useState } from "react";
-import {Filter as Filterer,SuppliersParams} from "Redux/Actions";
+import {Filter as Filterer,SuppliersParams,Suppliers} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 
@@ -12,6 +12,7 @@ const Filter = (props:any) => {
     type action = "close" | "open";
     type submit = "clear" | "filter";
     const supplier = useSelector((state:any)=>state.Suppliers)
+    
     const ref:any = {
         supplier_code       : React.useRef(null),
         supplier_name       : React.useRef(null),
@@ -59,53 +60,56 @@ const Filter = (props:any) => {
     }
 
     const setText=(event:any) =>{
-        let a:control = event.target.name;
-        props.setFilter({
-            ...props.filter,
-            [event.target.name] : {
-                ...props.filter[a],
-                key : event.target.value,
+        dispatch(SuppliersParams({
+            ...supplier.params,
+            filter : {
+                ...supplier.params.filter,
+                [event.target.name] : {
+                    ...supplier.params.filter[event.target.name],
+                    key : event.target.value,
+                }
             }
-        });
+        }));
     }
 
     const setFilterControl=(event:any) =>{
-        let a:control = event.target.name;
-        props.setFilter({
-            ...props.filter,
-            [event.target.name] : {
-                ...props.filter[a],
-                filter : event.target.value,
+        dispatch(SuppliersParams({
+            ...supplier.params,
+            filter : {
+                ...supplier.params.filter,
+                [event.target.name] : {
+                    ...supplier.params.filter[event.target.name],
+                    filter : event.target.value,
+                }
             }
-        });
+        }));
     }
 
     const submitFilter = async (action:submit,control:control) =>{
-        // reset();
-
-        let params = {per_page:10,page:1};
-        // props.setParams(params);
-        dispatch(SuppliersParams(params));
+        dispatch(SuppliersParams({
+            ...supplier.params,
+            per_page    : 10,
+            page        : 1,
+        }));
 
         if(action === "filter"){
             reset();
-            if(props.filter[control].key !== ''){
-                dispatch(Filterer(props.filter,"supplier",params));
+            if(supplier.params.filter[control].key !== ''){
+                dispatch(Suppliers());
             }
         }else{
-            if(props.filter[control].key !== ''){
-                let a = props.filter;
-
-                props.setFilter({
-                    ...props.filter,
-                    [control] : {
-                        ...props.filter[control],
-                        key : ''
+            if(supplier.params.filter[control].key !== ''){
+                dispatch(SuppliersParams({
+                    ...supplier.params,
+                    filter : {
+                        ...supplier.params.filter,
+                        [control] : {
+                            ...supplier.params.filter[control],
+                            key : '',
+                        }
                     }
-                });
-                
-                a[control].key = "";
-                dispatch(Filterer(a,"supplier",params));
+                }));
+                dispatch(Suppliers());
             }else{
                 setPopper({
                     ...popper,
@@ -119,11 +123,18 @@ const Filter = (props:any) => {
 
         if(e.key === "Backspace"){
             if(e.target.value.length === 1){
-                // reset();
-                
-                let a:any = props.filter;
-                a[e.target.name].key = '';    
-                dispatch(Filterer(a,"supplier",props.params));
+                dispatch(SuppliersParams({
+                    ...supplier.params,
+                    filter : {
+                        ...supplier.params.filter,
+                        [e.target.name] : {
+                            ...supplier.params.filter[e.target.name],
+                            key : '',
+                        }
+                    }
+                }));
+                dispatch(Suppliers());
+
             }
         }
 
@@ -131,7 +142,7 @@ const Filter = (props:any) => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"supplier",props.params));
+                dispatch(Suppliers());
             }
         }
     }
@@ -147,7 +158,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "supplier_code"
-                        value = {props.filter.supplier_code.key}
+                        value = {supplier.params.filter.supplier_code.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"supplier_code","open")}
                         onKeyDown = {onKey}
@@ -158,7 +169,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.supplier_code.filter}
+                                    value={supplier.params.filter.supplier_code.filter}
                                     onChange={setFilterControl}
                                     name = "supplier_code"
                                 >
@@ -171,9 +182,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","supplier_code")}>
-                                {props.filter.supplier_code.key === '' ?'Close' : 'Clear'}                            
+                                {supplier.params.filter.supplier_code.key === '' ?'Close' : 'Clear'}                            
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier_code")} disabled={props.filter.supplier_code.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier_code")} disabled={supplier.params.filter.supplier_code.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -190,7 +201,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "supplier_name"
-                        value = {props.filter.supplier_name.key}
+                        value = {supplier.params.filter.supplier_name.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"supplier_name","open")}
                         onKeyDown = {onKey}
@@ -201,7 +212,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.supplier_name.filter}
+                                    value={supplier.params.filter.supplier_name.filter}
                                     onChange={setFilterControl}
                                     name = "supplier_name"
                                 >
@@ -214,9 +225,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","supplier_name")}>
-                                {props.filter.supplier_name.key === '' ?'Close' : 'Clear'}                            
+                                {supplier.params.filter.supplier_name.key === '' ?'Close' : 'Clear'}                            
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier_name")} disabled={props.filter.supplier_name.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","supplier_name")} disabled={supplier.params.filter.supplier_name.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -231,7 +242,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "address"
-                        value = {props.filter.address.key}
+                        value = {supplier.params.filter.address.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"address","open")}
                         onKeyDown = {onKey}
@@ -242,7 +253,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.address.filter}
+                                    value={supplier.params.filter.address.filter}
                                     onChange={setFilterControl}
                                     name = "address"
                                 >
@@ -255,9 +266,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","address")}>
-                                {props.filter.address.key === '' ?'Close' : 'Clear'}
+                                {supplier.params.filter.address.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","address")} disabled={props.filter.address.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","address")} disabled={supplier.params.filter.address.key === '' }>
                                 Filter
                             </Button>
                         </Paper>
@@ -271,7 +282,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "contact_person"
-                        value = {props.filter.contact_person.key}
+                        value = {supplier.params.filter.contact_person.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"contact_person","open")}
                         onKeyDown = {onKey}
@@ -282,7 +293,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.contact_person.filter}
+                                    value={supplier.params.filter.contact_person.filter}
                                     onChange={setFilterControl}
                                     name = "contact_person"
                                 >
@@ -295,9 +306,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","contact_person")}>
-                                {props.filter.contact_person.key === '' ?'Close' : 'Clear'}                            
+                                {supplier.params.filter.contact_person.key === '' ?'Close' : 'Clear'}                            
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","contact_person")} disabled={props.filter.contact_person.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","contact_person")} disabled={supplier.params.filter.contact_person.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -311,7 +322,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "contact_number"
-                        value = {props.filter.contact_number.key}
+                        value = {supplier.params.filter.contact_number.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"contact_number","open")}
                         onKeyDown = {onKey}
@@ -322,7 +333,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.contact_number.filter}
+                                    value={supplier.params.filter.contact_number.filter}
                                     onChange={setFilterControl}
                                     name = "contact_number"
                                 >
@@ -335,9 +346,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","contact_number")}>
-                                {props.filter.contact_number.key === '' ?'Close' : 'Clear'}
+                                {supplier.params.filter.contact_number.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","contact_number")} disabled={props.filter.contact_number.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","contact_number")} disabled={supplier.params.filter.contact_number.key === '' }>
                                 Filter
                             </Button>
                         </Paper>
@@ -351,7 +362,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "email"
-                        value = {props.filter.email.key}
+                        value = {supplier.params.filter.email.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"email","open")}
                         onKeyDown = {onKey}
@@ -362,7 +373,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.email.filter}
+                                    value={supplier.params.filter.email.filter}
                                     onChange={setFilterControl}
                                     name = "email"
                                 >
@@ -375,9 +386,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","email")}>
-                                {props.filter.email.key === '' ?'Close' : 'Clear'}
+                                {supplier.params.filter.email.key === '' ?'Close' : 'Clear'}
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","email")} disabled={props.filter.email.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","email")} disabled={supplier.params.filter.email.key === '' }>
                                 Filter
                             </Button>
                         </Paper>

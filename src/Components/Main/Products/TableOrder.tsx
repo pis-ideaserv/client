@@ -42,6 +42,7 @@ const TableOrder = (props:TableOrder)=>{
                 vertical: 'top',
                 horizontal: 'center',
               }}
+            className="table-order-container"
         >
             <Paper className="table-order">
                 <div className="title">

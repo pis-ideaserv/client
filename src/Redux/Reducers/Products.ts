@@ -9,6 +9,7 @@ type status = "pending" | "done";
 let ascVal:asc = null;
 let stat:status = "done";
 
+
 const initialState = {
 	data 	: '',
 	table	: {
@@ -27,12 +28,27 @@ const initialState = {
 		created_by		: {name : 'Created By',			show : false,asc:ascVal},
 		remarks 		: {name : 'Remarks',			show : false,asc:ascVal}
 	},
-	graph : {},
 	filter : false,
 	status : stat,
 	params : {
 		page : 1,
 		per_page : 10,
+		filter : {
+			supplier            : {filter:'iet',key:''},
+			product             : {filter:'iet',key:''},
+			product_description : {filter:'iet',key:''},
+			supplier_name       : {filter:'iet',key:''},
+			category            : {filter:'iet',key:''},
+			serial_number       : {filter:'iet',key:''},
+			warranty            : {filter:'iet',key:''},
+			warranty_start      : {filter:'iet',key:''},
+			warranty_end        : {filter:'iet',key:''},
+			status              : {filter:'iet',key:''},
+			delivery_date       : {filter:'iet',key:''},
+			reference_delivery_document : {filter:'iet',key:''},
+			created_by          : {filter:'iet',key:''},
+			remarks             : {filter:'iet',key:''},
+		}
 	}
 };
 
@@ -63,11 +79,6 @@ const Products = (state = initialState, action:any) => {
 			return{
 				...state,
 				status : action.payload
-			}
-		case pr.graph :
-			return{
-				...state,
-				graph : action.payload,
 			}
     	default:
       		return state;

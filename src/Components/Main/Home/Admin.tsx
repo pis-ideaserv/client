@@ -17,7 +17,7 @@ const Admin = ( props :any ) => {
     const users = useSelector((state:any) => state.Users.data); 
     const products = useSelector((state:any) => state.Products.data); 
     const suppliers = useSelector((state:any) => state.Suppliers.data);
-    const graph = useSelector((state:any) => state.Products.graph.data);
+    const graph = useSelector((state:any) => state.status.graph.data);
     const data = useSelector((state:any) => state.Logs.data);
     const [open, setOpen] = React.useState(false);
     const [modal,setModal] = React.useState();
@@ -255,7 +255,7 @@ const Admin = ( props :any ) => {
                             <div className="col"><Dropbox className="home-icon" /></div>
                         </Paper>
                         <div className="title-box"> Total Products</div>
-                        <div className="amount-box">{products  ? products.data.meta.total : 0 }</div>
+                        <div className="amount-box">{graph  ? graph.total.product : 0 }</div>
                         {/* <div className="info-box">more info <ArrowForward /> </div> */}
                         <Button size="small" className="info-box" variant="contained" color="primary" onClick={ () => props.history.push('/products')}>More Info <ArrowForward /></Button>
                     </Paper>
@@ -266,7 +266,7 @@ const Admin = ( props :any ) => {
                             <div className="col"><VanUtility className="home-icon" /></div>
                         </Paper>
                         <div className="title-box">Total Suppliers</div>
-                        <div className="amount-box">{suppliers  ? suppliers.data.meta.total : 0 }</div>
+                        <div className="amount-box">{suppliers  ? graph.total.supplier : 0 }</div>
                         {/* <div className="info-box">more info <ArrowForward /> </div> */}
                         <Button size="small" className="info-box" variant="contained" color="primary" onClick={ () => props.history.push('/suppliers')} >More Info <ArrowForward /></Button>
                     </Paper>
@@ -277,7 +277,7 @@ const Admin = ( props :any ) => {
                             <div className="col"><Account className="home-icon" /></div>
                         </Paper>
                         <div className="title-box"> Total User</div>
-                        <div className="amount-box">{users  ? users.data.meta.total : 0 }</div>
+                        <div className="amount-box">{users  ? graph.total.user : 0 }</div>
                         {/* <div className="info-box"> more info <ArrowForward /> </div> */}
                         <Button size="small" className="info-box" variant="contained" color="primary" onClick={ () => props.history.push('/users')}>More Info <ArrowForward /></Button>
                     </Paper>

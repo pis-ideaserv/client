@@ -54,23 +54,7 @@ const Products = (props:any) =>{
     
     }
 
-    const initFilter = {
-        supplier            : {filter:'iet',key:''},
-        product             : {filter:'iet',key:''},
-        product_description : {filter:'iet',key:''},
-        supplier_name       : {filter:'iet',key:''},
-        category            : {filter:'iet',key:''},
-        serial_number       : {filter:'iet',key:''},
-        warranty            : {filter:'iet',key:''},
-        warranty_start      : {filter:'iet',key:''},
-        warranty_end        : {filter:'iet',key:''},
-        status              : {filter:'iet',key:''},
-        delivery_date       : {filter:'iet',key:''},
-        reference_delivery_document : {filter:'iet',key:''},
-        created_by          : {filter:'iet',key:''},
-        remarks             : {filter:'iet',key:''},
-    }
-    // const initParams = {page     : 1,per_page : 10}
+
 
 
     // const [ params, setParams ] = React.useState(initParams);
@@ -81,7 +65,7 @@ const Products = (props:any) =>{
     const [ submit, setSubmit ] = React.useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar(); //snackbar
     const [ upload,setUpload ] = React.useState(false);
-    const [filter, setFilter] = React.useState(initFilter);
+    // const [filter, setFilter] = React.useState(initFilter);
     const [ productCodeParam, setProductCodeParam ] = React.useState();
     const [tableAnchor,setTableAnchor] = React.useState<HTMLButtonElement | null>(null);
     const [tableOpen, setTableOpen] = React.useState(false);
@@ -146,17 +130,20 @@ const Products = (props:any) =>{
     
     
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number,) =>{
-        let pams:any = products.params;
-        pams.page=newPage+1;
-        dispatch(ProductsParams(pams));
-        dispatch(Filterer(filter,"product",pams));
+        dispatch(ProductsParams({
+            ...products.params,
+            page : newPage+1
+        }));
+        dispatch(productRedux());
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const val:any = event.target.value;
-        let paran = {page:1,per_page:val};
-        dispatch(ProductsParams(paran));
-        dispatch(Filterer(filter,"product",paran))
+        dispatch(ProductsParams({
+            ...products.params,
+            page : 1,
+            per_page : event.target.value,
+        }));
+        dispatch(productRedux());
     };
 
     const uploadFile = () => {
@@ -418,7 +405,7 @@ const Products = (props:any) =>{
                         </Fab>
                         <Fab size="small" color="primary" onClick={()=>{
                                 dispatch(ProductsFilter(!products.filter));
-                                setFilter(initFilter);
+                                // setFilter(initFilter);
                             }} >
                             <FilterList />
                         </Fab>
@@ -452,7 +439,7 @@ const Products = (props:any) =>{
                     </TableHead>
                     
                     <TableBody>
-                        <Filter filter={filter} setFilter={setFilter} />
+                        <Filter />
                         {
                             products.data ?
                                 products.data.data.data.map((key:any,id:number)=>(

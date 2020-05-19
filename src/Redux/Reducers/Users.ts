@@ -6,7 +6,14 @@ const initialState = {
 	params : {
 		page : 1,
 		per_page : 10,
-		filter : "",
+		filter : {
+			username        : {filter:'iet',key:''},
+			name            : {filter:'iet',key:''},
+			company         : {filter:'iet',key:''},
+			email           : {filter:'iet',key:''},
+			level           : {filter:'iet',key:0},
+			activated       : {filter:'iet',key:0},
+		},
 	},
 	status : "done",
 };

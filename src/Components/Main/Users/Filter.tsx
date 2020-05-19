@@ -1,6 +1,6 @@
 import { TableRow, TableCell, Popper, Paper, TextField, Button, FormControl, Select, MenuItem } from "@material-ui/core"
 import React, { useState } from "react";
-import {Filter as Filterer, UsersParams} from "Redux/Actions";
+import {UsersParams,Users} from "Redux/Actions";
 import {useDispatch,useSelector} from 'react-redux';
 
 
@@ -62,49 +62,56 @@ const Filter = (props:any) => {
     }
 
     const setText=(event:any) =>{
-        let a:control = event.target.name;
-        props.setFilter({
-            ...props.filter,
-            [event.target.name] : {
-                ...props.filter[a],
-                key : event.target.value,
+        dispatch(UsersParams({
+            ...user.params,
+            filter : {
+                ...user.params.filter,
+                [event.target.name] : {
+                    ...user.params.filter[event.target.name],
+                    key : event.target.value,
+                }
             }
-        });
+        }));
     }
 
     const setFilterControl=(event:any) =>{
-        let a:control = event.target.name;
-        props.setFilter({
-            ...props.filter,
-            [event.target.name] : {
-                ...props.filter[a],
-                filter : event.target.value,
+        dispatch(UsersParams({
+            ...user.params,
+            filter : {
+                ...user.params.filter,
+                [event.target.name] : {
+                    ...user.params.filter[event.target.name],
+                    filter : event.target.value,
+                }
             }
-        });
+        }));
     }
 
     const submitFilter = async (action:submit,control:control) =>{
-        let params = {per_page:10,page:1};
-        dispatch(UsersParams(params));
+        dispatch(UsersParams({
+            ...user.params,
+            per_page    : 10,
+            page        : 1,
+        }));
+
         if(action === "filter"){
             reset();
-            if(props.filter[control].key !== ''){
-                dispatch(Filterer(props.filter,"user",params));
+            if(user.params.filter[control].key !== ''){
+                dispatch(Users())
             }
         }else{
-            if(props.filter[control].key !== ''){
-                let a = props.filter;
-
-                props.setFilter({
-                    ...props.filter,
-                    [control] : {
-                        ...props.filter[control],
-                        key : ''
+            if(user.params.filter[control].key !== ''){
+                dispatch(UsersParams({
+                    ...user.params,
+                    filter : {
+                        ...user.params.filter,
+                        [control] : {
+                            ...user.params.filter[control],
+                            key : '',
+                        }
                     }
-                });
-                
-                a[control].key = "";
-                dispatch(Filterer(a,"user",params));
+                }));
+                dispatch(Users());
             }else{
                 setPopper({
                     ...popper,
@@ -118,12 +125,17 @@ const Filter = (props:any) => {
 
         if(e.key === "Backspace"){
             if(e.target.value.length === 1){
-
-                // reset();
-                
-                let a:any = props.filter;
-                a[e.target.name].key = '';    
-                dispatch(Filterer(a,"user",user.params));
+                dispatch(UsersParams({
+                    ...user.params,
+                    filter : {
+                        ...user.params.filter,
+                        [e.target.name] : {
+                            ...user.params.filter[e.target.name],
+                            key : '',
+                        }
+                    }
+                }));
+                dispatch(Users());
             }
         }
 
@@ -131,7 +143,7 @@ const Filter = (props:any) => {
             if(e.target.value !== ''){
                 reset();
                 ref[e.target.name].current.blur();
-                dispatch(Filterer(props.filter,"user",user.params));
+                dispatch(Users());
             }
         }
     }
@@ -148,7 +160,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "username"
-                        value = {props.filter.username.key}
+                        value = {user.params.filter.username.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"username","open")}
                         onKeyDown = {onKey}
@@ -159,7 +171,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.username.filter}
+                                    value={user.params.filter.username.filter}
                                     onChange={setFilterControl}
                                     name = "username"
                                 >
@@ -172,9 +184,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","username")}>
-                                {props.filter.username.key === '' ?'Close' : 'Clear'}                            
+                                {user.params.filter.username.key === '' ?'Close' : 'Clear'}                            
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","username")} disabled={props.filter.username.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","username")} disabled={user.params.filter.username.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -191,7 +203,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "name"
-                        value = {props.filter.name.key}
+                        value = {user.params.filter.name.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"name","open")}
                         onKeyDown = {onKey}
@@ -202,7 +214,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.name.filter}
+                                    value={user.params.filter.name.filter}
                                     onChange={setFilterControl}
                                     name = "name"
                                 >
@@ -215,9 +227,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","name")}>
-                                {props.filter.name.key === '' ?'Close' : 'Clear'}                            
+                                {user.params.filter.name.key === '' ?'Close' : 'Clear'}                            
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","name")} disabled={props.filter.name.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","name")} disabled={user.params.filter.name.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -232,7 +244,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "company"
-                        value = {props.filter.company.key}
+                        value = {user.params.filter.company.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"company","open")}
                         onKeyDown = {onKey}
@@ -243,7 +255,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.company.filter}
+                                    value={user.params.filter.company.filter}
                                     onChange={setFilterControl}
                                     name = "company"
                                 >
@@ -256,9 +268,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","company")}>
-                                {props.filter.company.key === '' ?'Close' : 'Clear'}                                                        
+                                {user.params.filter.company.key === '' ?'Close' : 'Clear'}                                                        
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","company")} disabled = { props.filter.company.key === '' }>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","company")} disabled = { user.params.filter.company.key === '' }>
                                 Filter
                             </Button>
                         </Paper>
@@ -272,7 +284,7 @@ const Filter = (props:any) => {
                         margin="normal"
                         variant="outlined"
                         name = "email"
-                        value = {props.filter.email.key}
+                        value = {user.params.filter.email.key}
                         onChange = {setText}
                         onFocus = {(event)=>controller(event,"email","open")}
                         onKeyDown = {onKey}
@@ -283,7 +295,7 @@ const Filter = (props:any) => {
                         <Paper className="popper-paper">
                             <FormControl variant="outlined" className="selector">
                                 <Select
-                                    value={props.filter.email.filter}
+                                    value={user.params.filter.email.filter}
                                     onChange={setFilterControl}
                                     name = "email"
                                 >
@@ -296,9 +308,9 @@ const Filter = (props:any) => {
                                 </Select>
                             </FormControl>
                             <Button variant="contained" color="primary" onClick={()=>submitFilter("clear","email")}>
-                                {props.filter.email.key === '' ?'Close' : 'Clear'}                        
+                                {user.params.filter.email.key === '' ?'Close' : 'Clear'}                        
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","email")} disabled={props.filter.email.key === ''}>
+                            <Button variant="contained" color="secondary" onClick={()=>submitFilter("filter","email")} disabled={user.params.filter.email.key === ''}>
                                 Filter
                             </Button>
                         </Paper>
@@ -306,8 +318,9 @@ const Filter = (props:any) => {
                 </TableCell>
                 <TableCell align="center" className="filter">
                     <TextField
-                        value={props.filter.level.key}
+                        value={user.params.filter.level.key}
                         onChange={setText}
+                        name="level"
                         variant="outlined"
                         select
                         className="input"
@@ -332,8 +345,9 @@ const Filter = (props:any) => {
 
                 <TableCell align="center" className="filter">
                         <TextField
-                            value={props.filter.activated.key}
+                            value={user.params.filter.activated.key}
                             onChange={setText}
+                            name="activated"
                             onFocus = {(event)=>controller(event,"activated","open")}
                             select
                             className="input"

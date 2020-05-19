@@ -3,7 +3,8 @@ import { status as stat} from '../Actions/Types';
 const initialState = {
 	loggedIn    : false,
 	error       : false,
-	caller		: false, 
+	caller		: false,
+	graph 		: {}
 };
 
 const status = (state = initialState, action:any) =>{
@@ -22,6 +23,11 @@ const status = (state = initialState, action:any) =>{
 			return {
 				...state,
 				caller : action.payload
+			}
+		case stat.graph : 
+			return {
+				...state,
+				graph : action.payload
 			}
     	default:
       		return state;

@@ -16,14 +16,6 @@ import Add from './Add';
 const Users = (props:any) =>{
 
     const userRequest:any = React.useRef();
-    const [filter, setFilter] = React.useState({
-        username        : {filter:'iet',key:''},
-        name            : {filter:'iet',key:''},
-        company         : {filter:'iet',key:''},
-        email           : {filter:'iet',key:''},
-        level           : {filter:'iet',key:0},
-        activated       : {filter:'iet',key:0},
-    });
 
     const initUsers:any = {
         id                  : '',
@@ -122,19 +114,20 @@ const Users = (props:any) =>{
     }
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,newPage: number,) =>{
-        // setPage(newPage);
-
-        let pams:any = usersState.params;
-        pams.page=newPage+1;
-        dispatch(UsersParams(pams));
-        dispatch(Filterer(filter,"user",pams));
+        dispatch(UsersParams({
+            ...usersState.params,
+            page : newPage+1,
+        }));
+        dispatch(user());
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const val:any = event.target.value;
-        let paran = {page:1,per_page:val};
-        dispatch(UsersParams(paran));
-        dispatch(Filterer(filter,"user",paran));
+        dispatch(UsersParams({
+            ...usersState.params,
+            page : 1,
+            per_page : event.target.value,
+        }));
+        dispatch(user());
     };
 
     const skeletonTable = () => {
@@ -337,7 +330,7 @@ const Users = (props:any) =>{
                         </TableHead>
                         
                         <TableBody>
-                            <Filter filter={filter} setFilter={setFilter} />
+                            <Filter />
                             {
                                 usersState.data ?
                                     usersState.data.data.data.map((key:any,id:number)=>(
